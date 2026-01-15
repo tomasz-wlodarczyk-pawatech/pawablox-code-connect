@@ -30,10 +30,13 @@ jobs:
       - name: Check for changes
         id: git-check
         run: |
-          if git diff --quiet packages/tokens/scss/vars/; then
+          # Check for both modified AND new (untracked) files
+          git add packages/tokens/scss/vars/
+          if git diff --cached --quiet packages/tokens/scss/vars/; then
             echo "changes=false" >> $GITHUB_OUTPUT
           else
             echo "changes=true" >> $GITHUB_OUTPUT
+            git diff --cached --stat packages/tokens/scss/vars/
           fi
 
       - name: Create Pull Request
