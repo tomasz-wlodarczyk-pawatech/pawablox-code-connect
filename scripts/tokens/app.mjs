@@ -144,12 +144,17 @@ function processTokenGroup(obj, prefix, tokensByCategory) {
     const item = obj[key];
 
     if (item && typeof item === 'object') {
-      if ('$value' in item) {
+      // Check for both W3C DTCG format ($value) and Tokens Studio format (value)
+      const hasValue = '$value' in item || 'value' in item;
+
+      if (hasValue) {
         // This is a token
         const name = prefix ? `${prefix}-${key}` : key;
         const token = createToken(name, item);
         if (token) {
-          const category = categorizeToken(token.name, item.$type);
+          // Get type from both formats
+          const tokenType = item.$type || item.type;
+          const category = categorizeToken(token.name, tokenType);
           tokensByCategory[category].push(token);
         }
       } else {
@@ -162,9 +167,10 @@ function processTokenGroup(obj, prefix, tokensByCategory) {
 }
 
 function createToken(name, item) {
-  const type = item.$type;
-  let value = item.$value;
-  const description = item.$description || '';
+  // Support both W3C DTCG format ($type/$value) and Tokens Studio format (type/value)
+  const type = item.$type || item.type;
+  let value = item.$value !== undefined ? item.$value : item.value;
+  const description = item.$description || item.description || '';
 
   // Clean up name
   name = name
