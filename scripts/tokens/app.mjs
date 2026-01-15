@@ -1,0 +1,339 @@
+import fs from 'fs';
+import path from 'path';
+
+const OUTPUT_DIR = 'packages/tokens/scss/vars';
+const TOKENS_DIR = 'tokens';
+const CACHE_DIR = 'scripts/tokens/cache';
+
+async function main() {
+  console.log('pawaBlox Token Generator');
+  console.log('========================');
+  console.log('');
+
+  if (!fs.existsSync(OUTPUT_DIR)) {
+    fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+  }
+
+  let tokensData = {};
+  let foundTokens = false;
+
+  // Option 1: Read from tokens/ directory (Tokens Studio sync)
+  if (fs.existsSync(TOKENS_DIR)) {
+    const jsonFiles = fs.readdirSync(TOKENS_DIR).filter(f => f.endsWith('.json'));
+    if (jsonFiles.length > 0) {
+      console.log('Reading tokens from Tokens Studio sync (tokens/)...');
+      for (const file of jsonFiles) {
+        const filePath = path.join(TOKENS_DIR, file);
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        console.log(`  - ${file}`);
+        Object.assign(tokensData, data);
+      }
+      foundTokens = true;
+    }
+  }
+
+  // Option 2: Read from cache/tokens.json (manual export)
+  const cachePath = path.join(CACHE_DIR, 'tokens.json');
+  if (!foundTokens && fs.existsSync(cachePath)) {
+    console.log('Reading tokens from cache (scripts/tokens/cache/tokens.json)...');
+    tokensData = JSON.parse(fs.readFileSync(cachePath, 'utf-8'));
+    foundTokens = true;
+  }
+
+  if (!foundTokens) {
+    console.log('No tokens found!');
+    console.log('');
+    console.log('Option 1: Use Tokens Studio for Figma');
+    console.log('  - Install Tokens Studio plugin in Figma');
+    console.log('  - Configure GitHub sync to tokens/ directory');
+    console.log('');
+    console.log('Option 2: Manual export');
+    console.log('  - Use pawaBlox plugin (scripts/tokens/figma-plugin-token-json/)');
+    console.log('  - Save JSON to scripts/tokens/cache/tokens.json');
+    return;
+  }
+
+  const tokensByCategory = {
+    colors: [],
+    spacing: [],
+    sizing: [],
+    borderWidth: [],
+    borderRadius: [],
+    opacity: [],
+    typography: [],
+    shadows: [],
+    other: [],
+  };
+
+  // Process W3C token format
+  for (const collectionKey in tokensData) {
+    const collection = tokensData[collectionKey];
+    console.log(`  Processing collection: ${collectionKey}`);
+    processTokenGroup(collection, '', tokensByCategory);
+  }
+
+  console.log('');
+  console.log('Generating SCSS files...');
+
+  // Colors
+  if (tokensByCategory.colors.length > 0) {
+    writeScssFile('_colors.scss', tokensByCategory.colors, 'COLOR TOKENS');
+    console.log(`  _colors.scss (${tokensByCategory.colors.length} variables)`);
+  }
+
+  // Spacing
+  if (tokensByCategory.spacing.length > 0) {
+    writeScssFile('_spacing.scss', tokensByCategory.spacing, 'SPACING TOKENS');
+    console.log(`  _spacing.scss (${tokensByCategory.spacing.length} variables)`);
+  }
+
+  // Sizing
+  if (tokensByCategory.sizing.length > 0) {
+    writeScssFile('_sizing.scss', tokensByCategory.sizing, 'SIZING TOKENS');
+    console.log(`  _sizing.scss (${tokensByCategory.sizing.length} variables)`);
+  }
+
+  // Border Width
+  if (tokensByCategory.borderWidth.length > 0) {
+    writeScssFile('_border-width.scss', tokensByCategory.borderWidth, 'BORDER WIDTH TOKENS');
+    console.log(`  _border-width.scss (${tokensByCategory.borderWidth.length} variables)`);
+  }
+
+  // Border Radius
+  if (tokensByCategory.borderRadius.length > 0) {
+    writeScssFile('_border-radius.scss', tokensByCategory.borderRadius, 'BORDER RADIUS TOKENS');
+    console.log(`  _border-radius.scss (${tokensByCategory.borderRadius.length} variables)`);
+  }
+
+  // Opacity
+  if (tokensByCategory.opacity.length > 0) {
+    writeScssFile('_opacity.scss', tokensByCategory.opacity, 'OPACITY TOKENS');
+    console.log(`  _opacity.scss (${tokensByCategory.opacity.length} variables)`);
+  }
+
+  // Typography
+  if (tokensByCategory.typography.length > 0) {
+    writeScssFile('_typography.scss', tokensByCategory.typography, 'TYPOGRAPHY TOKENS');
+    console.log(`  _typography.scss (${tokensByCategory.typography.length} variables)`);
+  }
+
+  // Shadows
+  if (tokensByCategory.shadows.length > 0) {
+    writeScssFile('_shadows.scss', tokensByCategory.shadows, 'SHADOW TOKENS');
+    console.log(`  _shadows.scss (${tokensByCategory.shadows.length} variables)`);
+  }
+
+  // Other
+  if (tokensByCategory.other.length > 0) {
+    writeScssFile('_other.scss', tokensByCategory.other, 'OTHER TOKENS');
+    console.log(`  _other.scss (${tokensByCategory.other.length} variables)`);
+  }
+
+  // Static files
+  generateBreakpointsFile();
+  generateZIndicesFile();
+
+  console.log('');
+  console.log('Done!');
+}
+
+function processTokenGroup(obj, prefix, tokensByCategory) {
+  for (const key in obj) {
+    if (key.startsWith('$')) continue; // Skip $extensions, $type, $value, etc.
+
+    const item = obj[key];
+
+    if (item && typeof item === 'object') {
+      if ('$value' in item) {
+        // This is a token
+        const name = prefix ? `${prefix}-${key}` : key;
+        const token = createToken(name, item);
+        if (token) {
+          const category = categorizeToken(token.name, item.$type);
+          tokensByCategory[category].push(token);
+        }
+      } else {
+        // This is a group, recurse
+        const newPrefix = prefix ? `${prefix}-${key}` : key;
+        processTokenGroup(item, newPrefix, tokensByCategory);
+      }
+    }
+  }
+}
+
+function createToken(name, item) {
+  const type = item.$type;
+  let value = item.$value;
+  const description = item.$description || '';
+
+  // Clean up name
+  name = name
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/--+/g, '-')
+    .replace(/^-|-$/g, '');
+
+  // Remove redundant prefixes like "opacity-opacity-0" -> "opacity-0"
+  // or "border-width-border-0" -> "border-0"
+  name = name
+    .replace(/^(opacity)-opacity-/, '$1-')
+    .replace(/^(border-width)-border-/, 'border-')
+    .replace(/^(border-radius)-rounded-/, 'rounded-')
+    .replace(/^(font-size)-text-/, 'text-')
+    .replace(/^(font-weight)-font-/, 'font-')
+    .replace(/^(line-height)-leading-/, 'leading-');
+
+  // Handle alias references like "{@collection.path.to.token}"
+  if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+    const aliasPath = value.slice(1, -1);
+    const aliasName = aliasPath
+      .split('.')
+      .slice(1) // Remove collection prefix
+      .join('-')
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, '-');
+    value = `$${aliasName}`;
+  } else if (type === 'number' && typeof value === 'number') {
+    // Format number values
+    const lowerName = name.toLowerCase();
+
+    if (lowerName.includes('opacity')) {
+      // Opacity: keep as decimal (0-1) or convert from 0-100
+      value = value > 1 ? value / 100 : value;
+    } else if (lowerName.startsWith('font-') && !lowerName.includes('size')) {
+      // Font weight: keep as number (no px)
+      value = value;
+    } else if (lowerName.startsWith('leading-') || lowerName.includes('line-height')) {
+      // Line height ratios: keep as number if <= 3
+      if (value <= 3) {
+        value = value;
+      } else {
+        value = `${value}px`;
+      }
+    } else {
+      // Default: add px
+      value = `${value}px`;
+    }
+  } else if (type === 'color') {
+    // Color values are already hex strings
+    value = value;
+  }
+
+  if (value === undefined || value === null) return null;
+
+  return {
+    name,
+    value,
+    type,
+    comment: description || null,
+  };
+}
+
+function categorizeToken(name, type) {
+  const lowerName = name.toLowerCase();
+
+  if (type === 'color') return 'colors';
+  if (lowerName.startsWith('spacing-')) return 'spacing';
+  if (lowerName.startsWith('border-') && !lowerName.includes('radius')) return 'borderWidth';
+  if (lowerName.startsWith('rounded-')) return 'borderRadius';
+  if (lowerName.startsWith('opacity-')) return 'opacity';
+  if (lowerName.startsWith('text-') || lowerName.startsWith('font-') || lowerName.startsWith('leading-') || lowerName.startsWith('tracking-')) return 'typography';
+  if (lowerName.includes('shadow')) return 'shadows';
+  if (lowerName.includes('size') && !lowerName.includes('font') && !lowerName.includes('text')) return 'sizing';
+
+  return 'other';
+}
+
+function writeScssFile(filename, tokens, title) {
+  const lines = [
+    '// ==========================================',
+    `// ${title}`,
+    '// Auto-generated from Figma - DO NOT EDIT',
+    '// ==========================================',
+    '',
+  ];
+
+  // Sort tokens naturally (spacing-1, spacing-2, spacing-10 not spacing-1, spacing-10, spacing-2)
+  tokens.sort((a, b) => {
+    const aMatch = a.name.match(/^(.+?)-?(\d+)$/);
+    const bMatch = b.name.match(/^(.+?)-?(\d+)$/);
+
+    if (aMatch && bMatch && aMatch[1] === bMatch[1]) {
+      return parseInt(aMatch[2]) - parseInt(bMatch[2]);
+    }
+
+    return a.name.localeCompare(b.name);
+  });
+
+  let lastGroup = '';
+  for (const token of tokens) {
+    // Add blank line between groups
+    const group = token.name.split('-')[0];
+    if (group !== lastGroup && lastGroup !== '') {
+      lines.push('');
+    }
+    lastGroup = group;
+
+    if (token.comment) {
+      lines.push(`// ${token.comment}`);
+    }
+    lines.push(`$${token.name}: ${token.value};`);
+  }
+
+  lines.push('');
+
+  fs.writeFileSync(path.join(OUTPUT_DIR, filename), lines.join('\n'));
+}
+
+function generateBreakpointsFile() {
+  const content = `// ==========================================
+// BREAKPOINTS
+// Tailwind CSS defaults
+// ==========================================
+
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;
+
+// Max-width breakpoints (for down queries)
+$breakpoint-sm-max: 639px;
+$breakpoint-md-max: 767px;
+$breakpoint-lg-max: 1023px;
+$breakpoint-xl-max: 1279px;
+`;
+
+  fs.writeFileSync(path.join(OUTPUT_DIR, '_breakpoints.scss'), content);
+  console.log('  _breakpoints.scss (static)');
+}
+
+function generateZIndicesFile() {
+  const content = `// ==========================================
+// Z-INDEX SCALE
+// Tailwind CSS defaults
+// ==========================================
+
+$z-0: 0;
+$z-10: 10;
+$z-20: 20;
+$z-30: 30;
+$z-40: 40;
+$z-50: 50;
+$z-auto: auto;
+
+// Semantic z-indices
+$z-dropdown: 1000;
+$z-sticky: 1020;
+$z-fixed: 1030;
+$z-modal-backdrop: 1040;
+$z-modal: 1050;
+$z-popover: 1060;
+$z-tooltip: 1070;
+`;
+
+  fs.writeFileSync(path.join(OUTPUT_DIR, '_z-indices.scss'), content);
+  console.log('  _z-indices.scss (static)');
+}
+
+main();

@@ -1,0 +1,9 @@
+{
+  "name": "@pawablox/storybook",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@pawablox/components": "workspace:*",
+    "@pawablox/tokens": "workspace:*"
+  }
+}

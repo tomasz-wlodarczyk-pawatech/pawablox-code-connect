@@ -1,0 +1,9 @@
+{
+  "name": "@pawablox/figma",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@pawablox/components": "workspace:*",
+    "@figma/code-connect": "^1.3.0"
+  }
+}

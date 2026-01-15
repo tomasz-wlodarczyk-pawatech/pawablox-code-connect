@@ -1,0 +1,20 @@
+{
+  "codeConnect": {
+    "include": ["packages/components/src/**/*", "packages/figma/src/**/*"],
+    "parser": "react",
+    "importPaths": {
+      "primitives/**/*": "primitives",
+      "layout/**/*": "layout",
+      "compositions/**/*": "compositions"
+    },
+    "paths": {
+      "primitives": ["packages/components/src/primitives"],
+      "layout": ["packages/components/src/layout"],
+      "compositions": ["packages/components/src/compositions"]
+    },
+    "documentUrlSubstitutions": {
+      "<FIGMA_BUTTON>": "https://figma.com/design/XXX?node-id=YYY",
+      "<FIGMA_INPUT>": "https://figma.com/design/XXX?node-id=ZZZ"
+    }
+  }
+}

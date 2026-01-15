@@ -1,0 +1,141 @@
+@use 'vars/breakpoints';
+
+// ==========================================
+// FLEX GAP MIXIN
+// ==========================================
+
+@mixin flex-gap($gap, $direction: row) {
+  gap: $gap;
+}
+
+@mixin flex-row-gap($gap) {
+  @include flex-gap($gap, row);
+}
+
+@mixin flex-column-gap($gap) {
+  @include flex-gap($gap, column);
+}
+
+// ==========================================
+// MEDIA QUERY MIXINS
+// ==========================================
+
+// Max-width (down)
+@mixin mq-xs-down {
+  @media (max-width: breakpoints.$breakpoint-mq-xs) {
+    @content;
+  }
+}
+
+@mixin mq-sm-down {
+  @media (max-width: breakpoints.$breakpoint-mq-sm) {
+    @content;
+  }
+}
+
+@mixin mq-md-down {
+  @media (max-width: breakpoints.$breakpoint-mq-md) {
+    @content;
+  }
+}
+
+@mixin mq-lg-down {
+  @media (max-width: breakpoints.$breakpoint-mq-lg) {
+    @content;
+  }
+}
+
+// Min-width (up)
+@mixin mq-sm-up {
+  @media (min-width: breakpoints.$breakpoint-sm) {
+    @content;
+  }
+}
+
+@mixin mq-md-up {
+  @media (min-width: breakpoints.$breakpoint-md) {
+    @content;
+  }
+}
+
+@mixin mq-lg-up {
+  @media (min-width: breakpoints.$breakpoint-lg) {
+    @content;
+  }
+}
+
+@mixin mq-xl-up {
+  @media (min-width: breakpoints.$breakpoint-xl) {
+    @content;
+  }
+}
+
+// Named breakpoints
+@mixin mobile {
+  @include mq-xs-down {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: breakpoints.$breakpoint-tablet) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: breakpoints.$breakpoint-desktop) {
+    @content;
+  }
+}
+
+// ==========================================
+// UTILITY MIXINS
+// ==========================================
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin line-clamp($lines) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@mixin focus-ring {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+@mixin reset-button {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+@mixin reset-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
