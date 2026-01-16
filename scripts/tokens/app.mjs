@@ -3,7 +3,6 @@ import path from 'path';
 
 const OUTPUT_DIR = 'packages/tokens/scss/vars';
 const TOKENS_DIR = 'tokens';
-const CACHE_DIR = 'scripts/tokens/cache';
 
 async function main() {
   console.log('pawaBlox Token Generator');
@@ -14,43 +13,30 @@ async function main() {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
   }
 
-  let tokensData = {};
-  let foundTokens = false;
-
-  // Option 1: Read from tokens/ directory (Tokens Studio sync)
-  if (fs.existsSync(TOKENS_DIR)) {
-    const jsonFiles = fs.readdirSync(TOKENS_DIR).filter(f => f.endsWith('.json'));
-    if (jsonFiles.length > 0) {
-      console.log('Reading tokens from Tokens Studio sync (tokens/)...');
-      for (const file of jsonFiles) {
-        const filePath = path.join(TOKENS_DIR, file);
-        const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-        console.log(`  - ${file}`);
-        Object.assign(tokensData, data);
-      }
-      foundTokens = true;
-    }
-  }
-
-  // Option 2: Read from cache/tokens.json (manual export)
-  const cachePath = path.join(CACHE_DIR, 'tokens.json');
-  if (!foundTokens && fs.existsSync(cachePath)) {
-    console.log('Reading tokens from cache (scripts/tokens/cache/tokens.json)...');
-    tokensData = JSON.parse(fs.readFileSync(cachePath, 'utf-8'));
-    foundTokens = true;
-  }
-
-  if (!foundTokens) {
+  // Read from tokens/ directory (Tokens Studio sync)
+  if (!fs.existsSync(TOKENS_DIR)) {
     console.log('No tokens found!');
     console.log('');
-    console.log('Option 1: Use Tokens Studio for Figma');
-    console.log('  - Install Tokens Studio plugin in Figma');
-    console.log('  - Configure GitHub sync to tokens/ directory');
-    console.log('');
-    console.log('Option 2: Manual export');
-    console.log('  - Use pawaBlox plugin (scripts/tokens/figma-plugin-token-json/)');
-    console.log('  - Save JSON to scripts/tokens/cache/tokens.json');
+    console.log('Setup Tokens Studio for Figma:');
+    console.log('  1. Install Tokens Studio plugin in Figma');
+    console.log('  2. Configure GitHub sync to tokens/ directory');
+    console.log('  3. Push tokens from Figma');
     return;
+  }
+
+  const jsonFiles = fs.readdirSync(TOKENS_DIR).filter(f => f.endsWith('.json'));
+  if (jsonFiles.length === 0) {
+    console.log('No JSON files found in tokens/ directory');
+    return;
+  }
+
+  let tokensData = {};
+  console.log('Reading tokens from Tokens Studio (tokens/)...');
+  for (const file of jsonFiles) {
+    const filePath = path.join(TOKENS_DIR, file);
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    console.log(`  - ${file}`);
+    Object.assign(tokensData, data);
   }
 
   const tokensByCategory = {
