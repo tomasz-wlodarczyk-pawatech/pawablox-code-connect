@@ -1,0 +1,14 @@
+{
+  "extends": ["stylelint-config-standard-scss"],
+  "plugins": ["stylelint-prettier"],
+  "rules": {
+    "selector-class-pattern": null,
+    "prettier/prettier": true,
+    "scss/operator-no-newline-after": null,
+    "scss/dollar-variable-empty-line-before": null,
+    "value-keyword-case": null,
+    "length-zero-no-unit": null,
+    "declaration-block-single-line-max-declarations": null,
+    "property-no-deprecated": null
+  }
+}

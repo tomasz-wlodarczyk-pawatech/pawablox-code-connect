@@ -28,8 +28,14 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Install dependencies
+        run: bun install
+
       - name: Generate SCSS tokens
         run: bun scripts/tokens/app.mjs
+
+      - name: Run lint and format fix
+        run: bun run fix && bun run format
 
       - name: Check for changes
         id: git-check

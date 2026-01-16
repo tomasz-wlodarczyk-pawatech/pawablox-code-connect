@@ -33,8 +33,7 @@ export const Icon: React.FC<IconProps> = ({
       strokeLinecap="round"
       strokeLinejoin="round"
       className={clsx(styles.icon, spin && styles.spin, className)}
-      {...props}
-    >
+      {...props}>
       {children}
     </svg>
   );

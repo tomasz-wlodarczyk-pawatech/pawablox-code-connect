@@ -1,8 +1,7 @@
-import figma from '@figma/code-connect';
 // import { Button } from '@pawablox/components/primitives/button/Button';
 
 // TODO: Update FIGMA_BUTTON_URL with actual Figma component URL
-const FIGMA_BUTTON_URL = '<FIGMA_BUTTON>';
+const _FIGMA_BUTTON_URL = '<FIGMA_BUTTON>';
 
 // Code Connect will be enabled when Button component is implemented
 // figma.connect(Button, FIGMA_BUTTON_URL, {

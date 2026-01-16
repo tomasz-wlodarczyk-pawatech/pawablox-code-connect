@@ -1,10 +1,5 @@
 {
   "extends": "./tsconfig.base.json",
-  "include": [
-    "packages/*/src/**/*",
-    ".storybook/**/*",
-    "vitest.config.ts",
-    "scripts/**/*"
-  ],
+  "include": ["packages/*/src/**/*", ".storybook/**/*", "vitest.config.ts", "scripts/**/*"],
   "exclude": ["node_modules", "dist"]
 }

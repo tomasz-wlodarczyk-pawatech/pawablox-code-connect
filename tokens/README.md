@@ -5,15 +5,18 @@ This folder is synced with Figma via **Tokens Studio for Figma**.
 ## Setup for Designers
 
 ### 1. Install Tokens Studio
+
 - Figma → Plugins → "Tokens Studio for Figma" → Install
 
 ### 2. Generate GitHub Token
+
 1. GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
 2. Generate new token with permissions:
    - `repo` (full control)
 3. Copy the token
 
 ### 3. Configure sync in Tokens Studio
+
 1. Open Tokens Studio in Figma
 2. Settings (⚙️) → Add new → **GitHub**
 3. Fill in:
@@ -28,9 +31,11 @@ This folder is synced with Figma via **Tokens Studio for Figma**.
 ### 4. Workflow
 
 **Pull tokens:**
+
 - Tokens Studio → Pull from GitHub
 
 **Push changes:**
+
 - Tokens Studio → Push to GitHub
 
 ## What happens after Push?

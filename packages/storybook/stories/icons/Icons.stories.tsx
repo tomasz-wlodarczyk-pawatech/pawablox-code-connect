@@ -69,7 +69,15 @@ export const Colors: Story = {
 export const Spinning: Story = {
   render: () => (
     <Icon size="lg" spin>
-      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" strokeDasharray="30 70" />
+      <circle
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+        strokeDasharray="30 70"
+      />
     </Icon>
   ),
 };

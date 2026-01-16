@@ -55,6 +55,9 @@ jobs:
           echo "### Index file:"
           cat packages/icons/src/index.ts || echo "Index file not found"
 
+      - name: Run lint and format fix
+        run: bun run fix && bun run format
+
       - name: Check for changes
         id: git-check
         run: |
