@@ -2,10 +2,10 @@
 import React from 'react';
 import { Icon, IconProps } from '../Icon';
 
-export const IconPlus: React.FC<Omit<IconProps, 'children'>> = (props) => (
+export const IconSearch: React.FC<Omit<IconProps, 'children'>> = (props) => (
   <Icon {...props}>
     <path
-      d="M5 12H19M12 5V19"
+      d="M21 21L16.66 16.66M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
@@ -14,4 +14,4 @@ export const IconPlus: React.FC<Omit<IconProps, 'children'>> = (props) => (
   </Icon>
 );
 
-IconPlus.displayName = 'IconPlus';
+IconSearch.displayName = 'IconSearch';
