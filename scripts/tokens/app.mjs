@@ -116,6 +116,7 @@ async function main() {
   }
 
   // Static files
+  generateFontsFile();
   generateBreakpointsFile();
   generateZIndicesFile();
 
@@ -283,6 +284,21 @@ function writeScssFile(filename, tokens, title) {
   lines.push('');
 
   fs.writeFileSync(path.join(OUTPUT_DIR, filename), lines.join('\n'));
+}
+
+function generateFontsFile() {
+  const content = `// ==========================================
+// FONT FAMILIES
+// Static definitions
+// ==========================================
+
+$roboto: 'Roboto', sans-serif;
+$geist-mono: 'Geist Mono', monospace;
+$georgia: 'Georgia', serif;
+`;
+
+  fs.writeFileSync(path.join(OUTPUT_DIR, '_fonts.scss'), content);
+  console.log('  _fonts.scss (static)');
 }
 
 function generateBreakpointsFile() {
