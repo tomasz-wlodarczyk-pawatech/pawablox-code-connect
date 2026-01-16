@@ -8,8 +8,10 @@ export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'tertiary';
 export type { ButtonSize };
 export type ButtonStyle = 'square' | 'round';
 
-export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
-  children: ReactNode;
+export interface ButtonProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'title'> {
+  title: string;
+  titleClassName?: string;
   variant?: ButtonVariant;
   size?: ButtonSize;
   buttonStyle?: ButtonStyle;
@@ -22,7 +24,8 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
-      children,
+      title,
+      titleClassName,
       variant = 'primary',
       size = 'default',
       buttonStyle = 'square',
@@ -57,15 +60,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           className
         )}
         {...props}>
-        {isLoading ? (
-          <IconSpinner size={spinnerSizeMap[size]} />
-        ) : (
-          <>
-            {leftIcon && <span className={styles.icon}>{leftIcon}</span>}
-            <span className={styles.label}>{children}</span>
-            {rightIcon && <span className={styles.icon}>{rightIcon}</span>}
-          </>
+        {isLoading && (
+          <span className={styles.icon}>
+            <IconSpinner size={spinnerSizeMap[size]} />
+          </span>
         )}
+        {!isLoading && leftIcon && <span className={styles.icon}>{leftIcon}</span>}
+        <span className={clsx(styles.title, titleClassName)}>{title}</span>
+        {!isLoading && rightIcon && <span className={styles.icon}>{rightIcon}</span>}
       </button>
     );
   }

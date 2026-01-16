@@ -44,28 +44,28 @@ type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
   args: {
-    children: 'BUTTON',
+    title: 'BUTTON',
     variant: 'primary',
   },
 };
 
 export const Secondary: Story = {
   args: {
-    children: 'BUTTON',
+    title: 'BUTTON',
     variant: 'secondary',
   },
 };
 
 export const Outline: Story = {
   args: {
-    children: 'BUTTON',
+    title: 'BUTTON',
     variant: 'outline',
   },
 };
 
 export const Tertiary: Story = {
   args: {
-    children: 'BUTTON',
+    title: 'BUTTON',
     variant: 'tertiary',
   },
 };
@@ -73,10 +73,10 @@ export const Tertiary: Story = {
 export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-      <Button variant="primary">PRIMARY</Button>
-      <Button variant="secondary">SECONDARY</Button>
-      <Button variant="outline">OUTLINE</Button>
-      <Button variant="tertiary">TERTIARY</Button>
+      <Button title="PRIMARY" variant="primary" />
+      <Button title="SECONDARY" variant="secondary" />
+      <Button title="OUTLINE" variant="outline" />
+      <Button title="TERTIARY" variant="tertiary" />
     </div>
   ),
 };
@@ -84,9 +84,9 @@ export const AllVariants: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-      <Button size="sm">SMALL</Button>
-      <Button size="default">DEFAULT</Button>
-      <Button size="lg">LARGE</Button>
+      <Button title="SMALL" size="sm" />
+      <Button title="DEFAULT" size="default" />
+      <Button title="LARGE" size="lg" />
     </div>
   ),
 };
@@ -94,29 +94,29 @@ export const Sizes: Story = {
 export const Styles: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-      <Button buttonStyle="square">SQUARE</Button>
-      <Button buttonStyle="round">ROUND</Button>
+      <Button title="SQUARE" buttonStyle="square" />
+      <Button title="ROUND" buttonStyle="round" />
     </div>
   ),
 };
 
 export const WithLeftIcon: Story = {
   args: {
-    children: 'BUTTON',
+    title: 'BUTTON',
     leftIcon: <IconBank />,
   },
 };
 
 export const WithRightIcon: Story = {
   args: {
-    children: 'BUTTON',
+    title: 'BUTTON',
     rightIcon: <IconBank />,
   },
 };
 
 export const WithBothIcons: Story = {
   args: {
-    children: 'BUTTON',
+    title: 'BUTTON',
     leftIcon: <IconBank />,
     rightIcon: <IconBank />,
   },
@@ -124,7 +124,7 @@ export const WithBothIcons: Story = {
 
 export const Loading: Story = {
   args: {
-    children: 'BUTTON',
+    title: 'BUTTON',
     isLoading: true,
   },
 };
@@ -132,25 +132,17 @@ export const Loading: Story = {
 export const LoadingVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-      <Button variant="primary" isLoading>
-        PRIMARY
-      </Button>
-      <Button variant="secondary" isLoading>
-        SECONDARY
-      </Button>
-      <Button variant="outline" isLoading>
-        OUTLINE
-      </Button>
-      <Button variant="tertiary" isLoading>
-        TERTIARY
-      </Button>
+      <Button title="PRIMARY" variant="primary" isLoading />
+      <Button title="SECONDARY" variant="secondary" isLoading />
+      <Button title="OUTLINE" variant="outline" isLoading />
+      <Button title="TERTIARY" variant="tertiary" isLoading />
     </div>
   ),
 };
 
 export const Disabled: Story = {
   args: {
-    children: 'BUTTON',
+    title: 'BUTTON',
     disabled: true,
   },
 };
@@ -158,25 +150,17 @@ export const Disabled: Story = {
 export const DisabledVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-      <Button variant="primary" disabled>
-        PRIMARY
-      </Button>
-      <Button variant="secondary" disabled>
-        SECONDARY
-      </Button>
-      <Button variant="outline" disabled>
-        OUTLINE
-      </Button>
-      <Button variant="tertiary" disabled>
-        TERTIARY
-      </Button>
+      <Button title="PRIMARY" variant="primary" disabled />
+      <Button title="SECONDARY" variant="secondary" disabled />
+      <Button title="OUTLINE" variant="outline" disabled />
+      <Button title="TERTIARY" variant="tertiary" disabled />
     </div>
   ),
 };
 
 export const FullWidth: Story = {
   args: {
-    children: 'FULL WIDTH BUTTON',
+    title: 'FULL WIDTH BUTTON',
     fullWidth: true,
   },
   decorators: [
@@ -191,18 +175,10 @@ export const FullWidth: Story = {
 export const RoundVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-      <Button variant="primary" buttonStyle="round">
-        PRIMARY
-      </Button>
-      <Button variant="secondary" buttonStyle="round">
-        SECONDARY
-      </Button>
-      <Button variant="outline" buttonStyle="round">
-        OUTLINE
-      </Button>
-      <Button variant="tertiary" buttonStyle="round">
-        TERTIARY
-      </Button>
+      <Button title="PRIMARY" variant="primary" buttonStyle="round" />
+      <Button title="SECONDARY" variant="secondary" buttonStyle="round" />
+      <Button title="OUTLINE" variant="outline" buttonStyle="round" />
+      <Button title="TERTIARY" variant="tertiary" buttonStyle="round" />
     </div>
   ),
 };
@@ -210,15 +186,9 @@ export const RoundVariants: Story = {
 export const AllSizesRound: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-      <Button size="sm" buttonStyle="round">
-        SMALL
-      </Button>
-      <Button size="default" buttonStyle="round">
-        DEFAULT
-      </Button>
-      <Button size="lg" buttonStyle="round">
-        LARGE
-      </Button>
+      <Button title="SMALL" size="sm" buttonStyle="round" />
+      <Button title="DEFAULT" size="default" buttonStyle="round" />
+      <Button title="LARGE" size="lg" buttonStyle="round" />
     </div>
   ),
 };

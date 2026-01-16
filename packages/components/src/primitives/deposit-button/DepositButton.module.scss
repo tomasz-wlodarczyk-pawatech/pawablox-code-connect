@@ -1,0 +1,73 @@
+@use '@pawablox/tokens/scss/vars/colors';
+@use '@pawablox/tokens/scss/vars/other';
+@use '@pawablox/tokens/scss/vars/spacing';
+@use '@pawablox/tokens/scss/vars/typography';
+@use '@pawablox/tokens/scss/mixins';
+
+.depositButton {
+  @include mixins.reset-button;
+
+  display: inline-flex;
+  align-items: center;
+  gap: spacing.$spacing-xs;
+  height: other.$interactive-height-sm;
+  padding-left: spacing.$spacing-sm;
+  padding-right: spacing.$spacing-0-5;
+  background-color: colors.$colors-button-secondary-bg-default;
+  border: 1px solid colors.$colors-border-inverse-secondary;
+  border-radius: other.$radius-round-button-radius;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+
+  &:hover:not(.disabled) {
+    background-color: colors.$colors-button-secondary-bg-hover;
+  }
+
+  &:focus-visible {
+    @include mixins.focus-ring;
+  }
+}
+
+.balanceContainer {
+  display: flex;
+  align-items: center;
+  gap: spacing.$spacing-1;
+}
+
+.balance {
+  font-family: typography.$font-font-sans;
+  font-size: typography.$text-xs-font-size;
+  line-height: typography.$text-xs-line-height;
+  font-weight: typography.$font-weight-bold;
+  color: colors.$colors-text-primary-inverse;
+  white-space: nowrap;
+}
+
+.chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: colors.$colors-icon-primary-inverse;
+}
+
+.depositIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: other.$width-w-7;
+  height: other.$height-h-7;
+  background-color: colors.$colors-background-brand-default;
+  border-radius: other.$radius-rounded-full;
+  color: colors.$colors-text-primary;
+  transition: background-color 150ms ease;
+
+  .depositButton:hover:not(.disabled) & {
+    background-color: colors.$colors-button-primary-bg-hover;
+  }
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

@@ -27,13 +27,12 @@ figma.connect(Button, '<FIGMA_BUTTON>', {
   },
   example: ({ variant, size, buttonStyle, disabled, isLoading }) => (
     <Button
+      title="Button"
       variant={variant}
       size={size}
       buttonStyle={buttonStyle}
       disabled={disabled}
       isLoading={isLoading}
-    >
-      Button
-    </Button>
+    />
   ),
 });
