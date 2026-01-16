@@ -1,11 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { IconCheck } from '@pawablox/components/icons/IconCheck';
-import { IconChevronDown } from '@pawablox/components/icons/IconChevronDown';
-import { IconChevronUp } from '@pawablox/components/icons/IconChevronUp';
-import { IconClose } from '@pawablox/components/icons/IconClose';
-import { IconSearch } from '@pawablox/components/icons/IconSearch';
-import { IconSpinner } from '@pawablox/components/icons/IconSpinner';
-import { Icon, IconSize } from '@pawablox/components/icons/Icon';
+import { Icon, IconSize } from '@pawablox/icons';
+
+// Import all icons from @pawablox/icons
+// After running `bun script:icons`, uncomment and update these imports:
+// import { IconCheck, IconClose, IconChevronDown, ... } from '@pawablox/icons';
 
 const meta: Meta<typeof Icon> = {
   title: 'Icons/Overview',
@@ -13,49 +11,47 @@ const meta: Meta<typeof Icon> = {
   parameters: {
     layout: 'centered',
   },
+  argTypes: {
+    size: {
+      control: 'select',
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    },
+    color: {
+      control: 'color',
+    },
+    spin: {
+      control: 'boolean',
+    },
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof Icon>;
 
-const AllIcons = ({ size, color }: { size: IconSize; color?: string }) => (
-  <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-    <IconCheck size={size} color={color} />
-    <IconClose size={size} color={color} />
-    <IconChevronDown size={size} color={color} />
-    <IconChevronUp size={size} color={color} />
-    <IconSearch size={size} color={color} />
-    <IconSpinner size={size} color={color} />
-  </div>
+// Example icon using the base Icon component
+const ExampleIcon = ({ size, color }: { size: IconSize; color?: string }) => (
+  <Icon size={size} color={color}>
+    <polyline points="20 6 9 17 4 12" />
+  </Icon>
 );
 
 export const Default: Story = {
-  render: () => <AllIcons size="md" />,
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+      <ExampleIcon size="md" />
+    </div>
+  ),
 };
 
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <div>
-        <span style={{ marginRight: '8px', fontSize: '12px' }}>xs:</span>
-        <AllIcons size="xs" />
-      </div>
-      <div>
-        <span style={{ marginRight: '8px', fontSize: '12px' }}>sm:</span>
-        <AllIcons size="sm" />
-      </div>
-      <div>
-        <span style={{ marginRight: '8px', fontSize: '12px' }}>md:</span>
-        <AllIcons size="md" />
-      </div>
-      <div>
-        <span style={{ marginRight: '8px', fontSize: '12px' }}>lg:</span>
-        <AllIcons size="lg" />
-      </div>
-      <div>
-        <span style={{ marginRight: '8px', fontSize: '12px' }}>xl:</span>
-        <AllIcons size="xl" />
-      </div>
+      {(['xs', 'sm', 'md', 'lg', 'xl'] as IconSize[]).map((size) => (
+        <div key={size} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '12px', width: '24px' }}>{size}:</span>
+          <ExampleIcon size={size} />
+        </div>
+      ))}
     </div>
   ),
 };
@@ -63,9 +59,17 @@ export const Sizes: Story = {
 export const Colors: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <AllIcons size="lg" color="#9ce800" />
-      <AllIcons size="lg" color="#cc371b" />
-      <AllIcons size="lg" color="#22bfdb" />
+      <ExampleIcon size="lg" color="#9ce800" />
+      <ExampleIcon size="lg" color="#cc371b" />
+      <ExampleIcon size="lg" color="#22bfdb" />
     </div>
+  ),
+};
+
+export const Spinning: Story = {
+  render: () => (
+    <Icon size="lg" spin>
+      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" strokeDasharray="30 70" />
+    </Icon>
   ),
 };

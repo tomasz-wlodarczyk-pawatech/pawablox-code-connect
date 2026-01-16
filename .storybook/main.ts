@@ -29,6 +29,7 @@ const config: StorybookConfig = {
         ...config.resolve?.alias,
         '@pawablox/tokens': resolve(__dirname, '../packages/tokens'),
         '@pawablox/components': resolve(__dirname, '../packages/components/src'),
+        '@pawablox/icons': resolve(__dirname, '../packages/icons/src'),
       },
     };
     return config;

@@ -1,9 +1,177 @@
+import { mkdir, readdir, rm, writeFile } from 'fs/promises';
+import { existsSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const FIGMA_API_BASE = 'https://api.figma.com/v1';
-const OUTPUT_DIR = 'packages/components/src/icons';
+const OUTPUT_DIR = join(__dirname, '../../packages/icons/src/icons');
+const INDEX_FILE = join(__dirname, '../../packages/icons/src/index.ts');
+
+/**
+ * Convert Figma component name to React component name
+ * Examples:
+ * - "icon/check" → "IconCheck"
+ * - "Icons/Chevron Down" → "IconChevronDown"
+ * - "24/alert-triangle" → "IconAlertTriangle"
+ */
+function figmaNameToComponentName(name) {
+  // Remove common prefixes like "icon/", "Icons/", "24/", etc.
+  const cleaned = name
+    .replace(/^(icon[s]?|icons?|\d+)[\/\\]/i, '')
+    .replace(/[\/\\]/g, ' ');
+
+  // Convert to PascalCase
+  const pascalCase = cleaned
+    .split(/[\s\-_]+/)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('');
+
+  // Ensure it starts with "Icon"
+  return pascalCase.startsWith('Icon') ? pascalCase : `Icon${pascalCase}`;
+}
+
+/**
+ * Convert SVG attributes to React-compatible camelCase
+ */
+function svgAttributesToReact(svg) {
+  const attributeMap = {
+    'stroke-width': 'strokeWidth',
+    'stroke-linecap': 'strokeLinecap',
+    'stroke-linejoin': 'strokeLinejoin',
+    'stroke-dasharray': 'strokeDasharray',
+    'stroke-dashoffset': 'strokeDashoffset',
+    'stroke-miterlimit': 'strokeMiterlimit',
+    'stroke-opacity': 'strokeOpacity',
+    'fill-opacity': 'fillOpacity',
+    'fill-rule': 'fillRule',
+    'clip-path': 'clipPath',
+    'clip-rule': 'clipRule',
+    'font-family': 'fontFamily',
+    'font-size': 'fontSize',
+    'font-weight': 'fontWeight',
+    'font-style': 'fontStyle',
+    'text-anchor': 'textAnchor',
+    'dominant-baseline': 'dominantBaseline',
+    'alignment-baseline': 'alignmentBaseline',
+    'stop-color': 'stopColor',
+    'stop-opacity': 'stopOpacity',
+    'xlink:href': 'xlinkHref',
+    'xml:space': 'xmlSpace',
+  };
+
+  let result = svg;
+  for (const [kebab, camel] of Object.entries(attributeMap)) {
+    result = result.replace(new RegExp(kebab, 'g'), camel);
+  }
+
+  return result;
+}
+
+/**
+ * Optimize and clean SVG content
+ */
+function optimizeSvg(svg) {
+  let optimized = svg
+    // Remove XML declaration
+    .replace(/<\?xml[^?]*\?>/gi, '')
+    // Remove DOCTYPE
+    .replace(/<!DOCTYPE[^>]*>/gi, '')
+    // Remove comments
+    .replace(/<!--[\s\S]*?-->/g, '')
+    // Remove Figma-specific attributes
+    .replace(/\s*data-[^=]*="[^"]*"/g, '')
+    .replace(/\s*id="[^"]*"/g, '')
+    // Replace fixed colors with currentColor for flexibility
+    .replace(/stroke="(?!none|currentColor)[^"]*"/g, 'stroke="currentColor"')
+    .replace(/fill="(?!none|currentColor)[^"]*"/g, 'fill="currentColor"')
+    // Clean up whitespace
+    .replace(/>\s+</g, '><')
+    .trim();
+
+  return optimized;
+}
+
+/**
+ * Extract inner SVG content (everything between <svg> and </svg>)
+ */
+function extractSvgContent(svg) {
+  const match = svg.match(/<svg[^>]*>([\s\S]*)<\/svg>/i);
+  return match ? match[1].trim() : '';
+}
+
+/**
+ * Generate React component code
+ */
+function generateComponent(componentName, svgContent) {
+  return `// Auto-generated from Figma - DO NOT EDIT
+import React from 'react';
+import { Icon, IconProps } from '../Icon';
+
+export const ${componentName}: React.FC<Omit<IconProps, 'children'>> = (props) => (
+  <Icon {...props}>
+    ${svgContent}
+  </Icon>
+);
+
+${componentName}.displayName = '${componentName}';
+`;
+}
+
+/**
+ * Generate barrel exports for all icons
+ */
+function generateIndexContent(iconNames) {
+  const exports = iconNames
+    .map(name => `export { ${name} } from './icons/${name}';`)
+    .join('\n');
+
+  return `// Base Icon component and types
+export { Icon } from './Icon';
+export type { IconProps, IconSize } from './types';
+
+// Auto-generated icon exports
+${exports}
+`;
+}
+
+/**
+ * Find all icon components in the Figma file node
+ */
+function findIconComponents(node, icons = []) {
+  if (node.type === 'COMPONENT' || node.type === 'COMPONENT_SET') {
+    // For COMPONENT_SET, we want the individual variants
+    if (node.type === 'COMPONENT_SET' && node.children) {
+      // Get the first variant as the default
+      const defaultVariant = node.children[0];
+      if (defaultVariant) {
+        icons.push({
+          id: defaultVariant.id,
+          name: node.name, // Use parent name for cleaner naming
+        });
+      }
+    } else if (node.type === 'COMPONENT') {
+      icons.push({
+        id: node.id,
+        name: node.name,
+      });
+    }
+  }
+
+  if (node.children) {
+    for (const child of node.children) {
+      findIconComponents(child, icons);
+    }
+  }
+
+  return icons;
+}
 
 async function main() {
   const token = process.env.FIGMA_ACCESS_TOKEN;
-  const fileKey = process.env.FIGMA_FILE_KEY;
+  const fileKey = process.env.FIGMA_ICONS_FILE_KEY || process.env.FIGMA_FILE_KEY;
   const iconsNodeId = process.env.FIGMA_ICONS_NODE_ID;
 
   if (!token || !fileKey || !iconsNodeId) {
@@ -11,22 +179,26 @@ async function main() {
     console.log('======================');
     console.log('');
     console.log('To use this script, set the following environment variables:');
-    console.log('  FIGMA_ACCESS_TOKEN - Your Figma personal access token');
-    console.log('  FIGMA_FILE_KEY - The Figma file key containing your icons');
-    console.log('  FIGMA_ICONS_NODE_ID - The node ID of the icons frame');
+    console.log('  FIGMA_ACCESS_TOKEN    - Your Figma personal access token');
+    console.log('  FIGMA_ICONS_FILE_KEY  - The Figma file key containing your icons');
+    console.log('                          (or FIGMA_FILE_KEY as fallback)');
+    console.log('  FIGMA_ICONS_NODE_ID   - The node ID of the icons frame');
     console.log('');
     console.log('Example:');
-    console.log('  FIGMA_ACCESS_TOKEN=xxx FIGMA_FILE_KEY=yyy FIGMA_ICONS_NODE_ID=zzz bun scripts/icons/app.mjs');
+    console.log('  FIGMA_ACCESS_TOKEN=xxx FIGMA_ICONS_FILE_KEY=yyy FIGMA_ICONS_NODE_ID=zzz bun script:icons');
     console.log('');
-    console.log(`Icons will be generated to: ${OUTPUT_DIR}/`);
+    console.log(`Icons will be generated to: packages/icons/src/icons/`);
     return;
   }
 
   console.log('Fetching icons from Figma...');
+  console.log(`File key: ${fileKey}`);
+  console.log(`Node ID: ${iconsNodeId}`);
 
   try {
-    // Get node info
-    const response = await fetch(
+    // Step 1: Get node info to find all icon components
+    console.log('\n[1/4] Fetching icon components from Figma...');
+    const nodeResponse = await fetch(
       `${FIGMA_API_BASE}/files/${fileKey}/nodes?ids=${iconsNodeId}`,
       {
         headers: {
@@ -35,23 +207,108 @@ async function main() {
       }
     );
 
-    if (!response.ok) {
-      throw new Error(`Figma API error: ${response.status} ${response.statusText}`);
+    if (!nodeResponse.ok) {
+      const errorText = await nodeResponse.text();
+      throw new Error(`Figma API error: ${nodeResponse.status} ${nodeResponse.statusText}\n${errorText}`);
     }
 
-    const data = await response.json();
-    console.log('Icons data fetched successfully!');
+    const nodeData = await nodeResponse.json();
+    const rootNode = nodeData.nodes[iconsNodeId]?.document;
 
-    // TODO: Implement icon generation logic
-    // 1. Export SVGs from Figma
-    // 2. Convert to React components
-    // 3. Write to OUTPUT_DIR
-    console.log('');
-    console.log('Note: Icon generation not yet implemented.');
-    console.log('Please implement the SVG-to-React conversion logic.');
+    if (!rootNode) {
+      throw new Error(`Node ${iconsNodeId} not found in Figma file`);
+    }
+
+    // Find all icon components
+    const iconComponents = findIconComponents(rootNode);
+    console.log(`Found ${iconComponents.length} icon components`);
+
+    if (iconComponents.length === 0) {
+      console.log('No icon components found. Make sure the node contains COMPONENT or COMPONENT_SET nodes.');
+      return;
+    }
+
+    // Step 2: Export SVGs for all components
+    console.log('\n[2/4] Exporting SVGs from Figma...');
+    const nodeIds = iconComponents.map(c => c.id).join(',');
+    const imagesResponse = await fetch(
+      `${FIGMA_API_BASE}/images/${fileKey}?ids=${nodeIds}&format=svg`,
+      {
+        headers: {
+          'X-Figma-Token': token,
+        },
+      }
+    );
+
+    if (!imagesResponse.ok) {
+      const errorText = await imagesResponse.text();
+      throw new Error(`Figma Images API error: ${imagesResponse.status}\n${errorText}`);
+    }
+
+    const imagesData = await imagesResponse.json();
+    const svgUrls = imagesData.images;
+
+    // Step 3: Download and process SVGs
+    console.log('\n[3/4] Processing SVGs and generating React components...');
+
+    // Clean output directory
+    if (existsSync(OUTPUT_DIR)) {
+      await rm(OUTPUT_DIR, { recursive: true });
+    }
+    await mkdir(OUTPUT_DIR, { recursive: true });
+
+    const generatedIcons = [];
+
+    for (const icon of iconComponents) {
+      const svgUrl = svgUrls[icon.id];
+      if (!svgUrl) {
+        console.warn(`  Warning: No SVG URL for ${icon.name} (${icon.id})`);
+        continue;
+      }
+
+      // Fetch SVG content
+      const svgResponse = await fetch(svgUrl);
+      if (!svgResponse.ok) {
+        console.warn(`  Warning: Failed to fetch SVG for ${icon.name}`);
+        continue;
+      }
+
+      let svgContent = await svgResponse.text();
+
+      // Process SVG
+      svgContent = optimizeSvg(svgContent);
+      svgContent = svgAttributesToReact(svgContent);
+      const innerContent = extractSvgContent(svgContent);
+
+      if (!innerContent) {
+        console.warn(`  Warning: Empty SVG content for ${icon.name}`);
+        continue;
+      }
+
+      // Generate component
+      const componentName = figmaNameToComponentName(icon.name);
+      const componentCode = generateComponent(componentName, innerContent);
+
+      // Write component file
+      const componentPath = join(OUTPUT_DIR, `${componentName}.tsx`);
+      await writeFile(componentPath, componentCode, 'utf-8');
+
+      generatedIcons.push(componentName);
+      console.log(`  Generated: ${componentName}`);
+    }
+
+    // Step 4: Generate barrel exports
+    console.log('\n[4/4] Generating barrel exports...');
+    const indexContent = generateIndexContent(generatedIcons.sort());
+    await writeFile(INDEX_FILE, indexContent, 'utf-8');
+
+    console.log('\n========================================');
+    console.log(`Successfully generated ${generatedIcons.length} icon components!`);
+    console.log(`Output directory: packages/icons/src/icons/`);
+    console.log('========================================\n');
 
   } catch (error) {
-    console.error('Error fetching icons:', error.message);
+    console.error('Error generating icons:', error.message);
     process.exit(1);
   }
 }

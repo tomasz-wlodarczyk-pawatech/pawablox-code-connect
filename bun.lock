@@ -51,6 +51,20 @@
         "@pawablox/components": "workspace:*",
       },
     },
+    "packages/icons": {
+      "name": "@pawablox/icons",
+      "version": "0.1.0",
+      "dependencies": {
+        "clsx": "^2.1.0",
+      },
+      "devDependencies": {
+        "@pawablox/tokens": "workspace:*",
+      },
+      "peerDependencies": {
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+      },
+    },
     "packages/storybook": {
       "name": "@pawablox/storybook",
       "version": "0.1.0",
@@ -252,6 +266,8 @@
     "@pawablox/components": ["@pawablox/components@workspace:packages/components"],
 
     "@pawablox/figma": ["@pawablox/figma@workspace:packages/figma"],
+
+    "@pawablox/icons": ["@pawablox/icons@workspace:packages/icons"],
 
     "@pawablox/storybook": ["@pawablox/storybook@workspace:packages/storybook"],
 
