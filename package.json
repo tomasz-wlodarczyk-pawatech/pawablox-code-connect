@@ -24,14 +24,10 @@
     "figma:publish": "npx @figma/code-connect connect publish",
     "script:tokens": "bun scripts/tokens/app.mjs",
     "script:icons": "bun scripts/icons/app.mjs",
-    "changeset": "changeset",
-    "version": "changeset version",
     "release": "bun run build && bun run publish:packages",
-    "publish:packages": "cd packages/tokens && npm publish && cd ../icons && npm publish && cd ../components && npm publish"
+    "publish:packages": "npm publish --workspace=@tomasz-wlodarczyk-pawatech/tokens && npm publish --workspace=@tomasz-wlodarczyk-pawatech/icons && npm publish --workspace=@tomasz-wlodarczyk-pawatech/components"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.5.2",
-    "@changesets/cli": "^2.29.8",
     "@eslint/js": "9.18.0",
     "@storybook/addon-a11y": "8.5.0",
     "@storybook/addon-essentials": "8.5.0",

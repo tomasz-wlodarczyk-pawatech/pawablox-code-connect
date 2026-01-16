@@ -16,14 +16,13 @@ jobs:
     permissions:
       contents: write
       packages: write
-      pull-requests: write
-      id-token: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -45,25 +44,29 @@ jobs:
       - name: Generate barrel exports
         run: bun run barrels
 
+      - name: Bump versions
+        run: node scripts/bump-versions.mjs
+
       - name: Build packages
         run: bun run build
 
       - name: Setup npm authentication
         run: |
           cat << EOF > ~/.npmrc
-          //npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}
+          //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
           @tomasz-wlodarczyk-pawatech:registry=https://npm.pkg.github.com
           always-auth=true
           EOF
 
-      - name: Create Release Pull Request or Publish
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          version: bun run version
-          publish: bun run release
-          title: 'chore: version packages'
-          commit: 'chore: version packages'
+      - name: Publish packages
+        run: bun run publish:packages
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit version bump
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add packages/*/package.json
+          git commit -m "chore: bump versions [skip ci]" || echo "No changes to commit"
+          git push
