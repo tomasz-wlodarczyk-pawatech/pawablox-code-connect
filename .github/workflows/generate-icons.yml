@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       icons_node_id:
-        description: 'Figma node ID containing icons (e.g., 123-456)'
+        description: 'Figma node ID containing icons (e.g., 1565-5788 from URL or 1565:5788)'
         required: true
         type: string
 
@@ -37,18 +37,39 @@ jobs:
         env:
           FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
           FIGMA_ICONS_NODE_ID: ${{ inputs.icons_node_id }}
-        run: bun script:icons
+        run: |
+          echo "Starting icon generation..."
+          echo "File key: $FIGMA_ICONS_FILE_KEY"
+          echo "Node ID: $FIGMA_ICONS_NODE_ID"
+          bun script:icons
+
+      - name: List generated files
+        run: |
+          echo "### Generated files:"
+          if [ -d "packages/icons/src/icons" ]; then
+            ls -la packages/icons/src/icons/ || echo "No icons directory"
+          else
+            echo "Icons directory does not exist"
+          fi
+          echo ""
+          echo "### Index file:"
+          cat packages/icons/src/index.ts || echo "Index file not found"
 
       - name: Check for changes
         id: git-check
         run: |
+          echo "Checking for changes..."
+          git status
           git add packages/icons/src/
           if git diff --cached --quiet packages/icons/src/; then
             echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected"
           else
             echo "changes=true" >> $GITHUB_OUTPUT
             echo "### Changed files:" >> $GITHUB_STEP_SUMMARY
             git diff --cached --stat packages/icons/src/ >> $GITHUB_STEP_SUMMARY
+            echo "Changes detected:"
+            git diff --cached --stat packages/icons/src/
           fi
 
       - name: Create Pull Request

@@ -1,4 +1,4 @@
-import { mkdir, readdir, rm, writeFile } from 'fs/promises';
+import { mkdir, rm, writeFile } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -11,11 +11,19 @@ const OUTPUT_DIR = join(__dirname, '../../packages/icons/src/icons');
 const INDEX_FILE = join(__dirname, '../../packages/icons/src/index.ts');
 
 /**
+ * Convert Figma node ID from URL format (1565-5788) to API format (1565:5788)
+ */
+function normalizeNodeId(nodeId) {
+  return nodeId.replace(/-/g, ':');
+}
+
+/**
  * Convert Figma component name to React component name
  * Examples:
  * - "icon/check" → "IconCheck"
  * - "Icons/Chevron Down" → "IconChevronDown"
  * - "24/alert-triangle" → "IconAlertTriangle"
+ * - "circle-dollar-sign" → "IconCircleDollarSign"
  */
 function figmaNameToComponentName(name) {
   // Remove common prefixes like "icon/", "Icons/", "24/", etc.
@@ -31,6 +39,18 @@ function figmaNameToComponentName(name) {
 
   // Ensure it starts with "Icon"
   return pascalCase.startsWith('Icon') ? pascalCase : `Icon${pascalCase}`;
+}
+
+/**
+ * Check if a name is a valid component name (not a variant property)
+ */
+function isValidComponentName(name) {
+  // Skip variant property names like "Size=24x24(2)", "State=Active", etc.
+  if (name.includes('=')) return false;
+  // Skip names that are just numbers or sizes
+  if (/^\d+x\d+/.test(name)) return false;
+  if (/^\d+$/.test(name)) return false;
+  return true;
 }
 
 /**
@@ -139,30 +159,38 @@ ${exports}
 
 /**
  * Find all icon components in the Figma file node
+ * Only picks up COMPONENT_SETs (using parent name) and standalone COMPONENTs
  */
-function findIconComponents(node, icons = []) {
-  if (node.type === 'COMPONENT' || node.type === 'COMPONENT_SET') {
-    // For COMPONENT_SET, we want the individual variants
-    if (node.type === 'COMPONENT_SET' && node.children) {
-      // Get the first variant as the default
-      const defaultVariant = node.children[0];
+function findIconComponents(node, icons = [], visitedSets = new Set()) {
+  // For COMPONENT_SET, use the set name and first variant's ID
+  if (node.type === 'COMPONENT_SET') {
+    if (!visitedSets.has(node.id) && isValidComponentName(node.name)) {
+      visitedSets.add(node.id);
+      // Get the first variant (usually the default)
+      const defaultVariant = node.children?.[0];
       if (defaultVariant) {
         icons.push({
           id: defaultVariant.id,
-          name: node.name, // Use parent name for cleaner naming
+          name: node.name,
         });
       }
-    } else if (node.type === 'COMPONENT') {
-      icons.push({
-        id: node.id,
-        name: node.name,
-      });
     }
+    // Don't recurse into COMPONENT_SET children to avoid picking up variants
+    return icons;
   }
 
+  // For standalone COMPONENT (not inside a COMPONENT_SET)
+  if (node.type === 'COMPONENT' && isValidComponentName(node.name)) {
+    icons.push({
+      id: node.id,
+      name: node.name,
+    });
+  }
+
+  // Recurse into children (frames, groups, etc.)
   if (node.children) {
     for (const child of node.children) {
-      findIconComponents(child, icons);
+      findIconComponents(child, icons, visitedSets);
     }
   }
 
@@ -172,7 +200,7 @@ function findIconComponents(node, icons = []) {
 async function main() {
   const token = process.env.FIGMA_ACCESS_TOKEN;
   const fileKey = process.env.FIGMA_ICONS_FILE_KEY || process.env.FIGMA_FILE_KEY;
-  const iconsNodeId = process.env.FIGMA_ICONS_NODE_ID;
+  let iconsNodeId = process.env.FIGMA_ICONS_NODE_ID;
 
   if (!token || !fileKey || !iconsNodeId) {
     console.log('Icon generation script');
@@ -183,13 +211,17 @@ async function main() {
     console.log('  FIGMA_ICONS_FILE_KEY  - The Figma file key containing your icons');
     console.log('                          (or FIGMA_FILE_KEY as fallback)');
     console.log('  FIGMA_ICONS_NODE_ID   - The node ID of the icons frame');
+    console.log('                          (supports both URL format 1565-5788 and API format 1565:5788)');
     console.log('');
     console.log('Example:');
-    console.log('  FIGMA_ACCESS_TOKEN=xxx FIGMA_ICONS_FILE_KEY=yyy FIGMA_ICONS_NODE_ID=zzz bun script:icons');
+    console.log('  FIGMA_ACCESS_TOKEN=xxx FIGMA_ICONS_FILE_KEY=yyy FIGMA_ICONS_NODE_ID=1565-5788 bun script:icons');
     console.log('');
     console.log(`Icons will be generated to: packages/icons/src/icons/`);
     return;
   }
+
+  // Normalize node ID (convert URL format to API format)
+  iconsNodeId = normalizeNodeId(iconsNodeId);
 
   console.log('Fetching icons from Figma...');
   console.log(`File key: ${fileKey}`);
@@ -227,6 +259,10 @@ async function main() {
       console.log('No icon components found. Make sure the node contains COMPONENT or COMPONENT_SET nodes.');
       return;
     }
+
+    // Log found icons
+    console.log('Icons to generate:');
+    iconComponents.forEach(ic => console.log(`  - ${ic.name}`));
 
     // Step 2: Export SVGs for all components
     console.log('\n[2/4] Exporting SVGs from Figma...');
