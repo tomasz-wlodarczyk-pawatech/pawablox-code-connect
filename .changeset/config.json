@@ -1,0 +1,20 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "tomasz-wlodarczyk-pawatech/pawablox-code-connect" }
+  ],
+  "commit": false,
+  "fixed": [],
+  "linked": [
+    ["@pawablox/components", "@pawablox/icons", "@pawablox/tokens"]
+  ],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": ["@pawablox/storybook", "@pawablox/figma"],
+  "privatePackages": {
+    "version": false,
+    "tag": false
+  }
+}

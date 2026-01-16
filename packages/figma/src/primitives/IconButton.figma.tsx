@@ -15,16 +15,16 @@ figma.connect(IconButton, '<FIGMA_ICON_BUTTON>', {
       Tertiary: 'tertiary',
       Outline: 'outline',
       Tonal: 'tonal',
-    }),
+    }) as IconButtonVariant,
     size: figma.enum('Size', {
       Default: 'default',
       sm: 'sm',
       lg: 'lg',
-    }),
+    }) as IconButtonSize,
     buttonStyle: figma.enum('Style', {
       Square: 'square',
       Circle: 'circle',
-    }),
+    }) as IconButtonStyle,
     disabled: figma.enum('State', {
       Disabled: true,
     }),
@@ -35,9 +35,9 @@ figma.connect(IconButton, '<FIGMA_ICON_BUTTON>', {
   example: ({ icon, variant, size, buttonStyle, disabled, isLoading }) => (
     <IconButton
       icon={icon}
-      variant={variant as IconButtonVariant}
-      size={size as IconButtonSize}
-      buttonStyle={buttonStyle as IconButtonStyle}
+      variant={variant}
+      size={size}
+      buttonStyle={buttonStyle}
       disabled={disabled}
       isLoading={isLoading}
       aria-label="Action"

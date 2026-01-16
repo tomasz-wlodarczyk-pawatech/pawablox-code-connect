@@ -1,4 +1,23 @@
 {
   "name": "@pawablox/tokens",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomasz-wlodarczyk-pawatech/pawablox-code-connect.git",
+    "directory": "packages/tokens"
+  },
+  "exports": {
+    "./scss/*": "./scss/*",
+    "./scss/vars/*": "./scss/vars/*"
+  },
+  "files": [
+    "scss",
+    "tokens.json"
+  ],
+  "scripts": {
+    "build": "echo 'Tokens package - no build needed (SCSS only)'"
+  }
 }

@@ -1,5 +1,10 @@
 import figma from '@figma/code-connect';
-import { Button, ButtonSize, ButtonStyle, ButtonVariant } from '@pawablox/components/primitives/button/Button';
+import {
+  Button,
+  ButtonSize,
+  ButtonStyle,
+  ButtonVariant,
+} from '@pawablox/components/primitives/button/Button';
 
 figma.connect(Button, '<FIGMA_BUTTON>', {
   props: {
@@ -8,16 +13,16 @@ figma.connect(Button, '<FIGMA_BUTTON>', {
       Secondary: 'secondary',
       Tertiary: 'tertiary',
       Outline: 'outline',
-    }),
+    }) as ButtonVariant,
     size: figma.enum('Size', {
       Default: 'default',
       Sm: 'sm',
       Lg: 'lg',
-    }),
+    }) as ButtonSize,
     buttonStyle: figma.enum('Style', {
       Square: 'square',
       Round: 'round',
-    }),
+    }) as ButtonStyle,
     disabled: figma.enum('State', {
       Disabled: true,
     }),
@@ -28,9 +33,9 @@ figma.connect(Button, '<FIGMA_BUTTON>', {
   example: ({ variant, size, buttonStyle, disabled, isLoading }) => (
     <Button
       title="Button"
-      variant={variant as ButtonVariant}
-      size={size as ButtonSize}
-      buttonStyle={buttonStyle as ButtonStyle}
+      variant={variant}
+      size={size}
+      buttonStyle={buttonStyle}
       disabled={disabled}
       isLoading={isLoading}
     />

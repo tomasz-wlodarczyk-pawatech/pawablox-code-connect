@@ -32,3 +32,4 @@ npm-debug.log*
 
 # Test coverage
 coverage/
+packages/components/src/index.ts

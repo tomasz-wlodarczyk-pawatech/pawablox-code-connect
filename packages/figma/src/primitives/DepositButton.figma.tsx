@@ -3,7 +3,7 @@ import { DepositButton } from '@pawablox/components/primitives/deposit-button/De
 
 figma.connect(DepositButton, '<FIGMA_DEPOSIT_BUTTON>', {
   props: {
-    showChevron: figma.boolean('icon', { true: true, false: false }),
+    showChevron: figma.boolean('Icon', { true: true, false: false }),
   },
   example: ({ showChevron }) => <DepositButton balance="GH₵ 882.10" showChevron={showChevron} />,
 });

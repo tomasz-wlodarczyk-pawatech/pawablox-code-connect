@@ -5,7 +5,6 @@ import { spinnerSizeMap, type ButtonSize } from '../../utils/buttonSizes';
 import styles from './Button.module.scss';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'tertiary';
-export type { ButtonSize };
 export type ButtonStyle = 'square' | 'round';
 
 export interface ButtonProps

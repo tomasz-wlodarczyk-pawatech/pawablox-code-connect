@@ -6,7 +6,10 @@
   ],
   "scripts": {
     "dev": "bun run --filter '*' dev",
-    "build": "bun run --filter '*' build",
+    "barrels": "ctix build --mode bundle -p packages/components/tsconfig.json -o packages/components/src --no-backup --overwrite",
+    "build": "bun run --filter '@pawablox/tokens' build && bun run --filter '@pawablox/icons' build && bun run --filter '@pawablox/components' build",
+    "build:all": "bun run barrels && bun run build",
+    "build:clean": "rm -rf packages/*/dist && bun run build",
     "test": "vitest run --passWithNoTests",
     "lint": "eslint . && bun run stylelint:lint",
     "fix": "eslint . --fix && bun run stylelint:fix",
@@ -20,13 +23,16 @@
     "figma:connect": "npx @figma/code-connect connect",
     "figma:publish": "npx @figma/code-connect connect publish",
     "script:tokens": "bun scripts/tokens/app.mjs",
-    "script:icons": "bun scripts/icons/app.mjs"
+    "script:icons": "bun scripts/icons/app.mjs",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "bun run build && bun run publish:packages",
+    "publish:packages": "cd packages/tokens && npm publish && cd ../icons && npm publish && cd ../components && npm publish"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.2",
+    "@changesets/cli": "^2.29.8",
     "@eslint/js": "9.18.0",
-    "stylelint": "17.0.0",
-    "stylelint-config-standard-scss": "17.0.0",
-    "stylelint-prettier": "5.0.3",
     "@storybook/addon-a11y": "8.5.0",
     "@storybook/addon-essentials": "8.5.0",
     "@storybook/addon-interactions": "8.5.0",
@@ -36,6 +42,7 @@
     "@types/react": "19.0.0",
     "@types/react-dom": "19.0.0",
     "@vitejs/plugin-react": "4.3.0",
+    "ctix": "^2.7.2",
     "eslint": "9.18.0",
     "eslint-plugin-prettier": "5.0.0",
     "eslint-plugin-react": "7.35.0",
@@ -46,9 +53,14 @@
     "react-dom": "19.0.0",
     "sass": "1.77.0",
     "storybook": "8.5.0",
+    "stylelint": "17.0.0",
+    "stylelint-config-standard-scss": "17.0.0",
+    "stylelint-prettier": "5.0.3",
+    "tsup": "^8.5.1",
     "typescript": "5.7.3",
     "typescript-eslint": "8.18.0",
     "vite": "6.0.0",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "2.0.0"
   }
 }
