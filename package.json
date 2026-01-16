@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "bun run --filter '*' dev",
     "build": "bun run --filter '*' build",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "lint": "eslint . && bun run stylelint:lint",
     "fix": "eslint . --fix && bun run stylelint:fix",
     "typecheck": "tsc -p packages/components/tsconfig.json --noEmit && tsc -p packages/icons/tsconfig.json --noEmit",
