@@ -2,5 +2,10 @@
 export { Icon } from './Icon';
 export type { IconProps, IconSize } from './types';
 
-// Auto-generated icon exports (populated by scripts/icons/app.mjs)
-// After running the generation script, icon exports will appear below:
+// Auto-generated icon exports
+export { IconBank } from './icons/IconBank';
+export { IconCircleDollarSign } from './icons/IconCircleDollarSign';
+export { IconCoins } from './icons/IconCoins';
+export { IconDeposit } from './icons/IconDeposit';
+export { IconMoney } from './icons/IconMoney';
+export { IconWithdrawal } from './icons/IconWithdrawal';
