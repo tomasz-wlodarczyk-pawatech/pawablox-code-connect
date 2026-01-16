@@ -175,16 +175,24 @@ function createToken(name, item) {
     .replace(/^(font-weight)-font-/, 'font-')
     .replace(/^(line-height)-leading-/, 'leading-');
 
-  // Handle alias references like "{@collection.path.to.token}"
+  // Handle alias references like "{spacing.2}" or "{roboto}"
   if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
     const aliasPath = value.slice(1, -1);
+    // Convert path like "spacing.2" to "spacing-2" or "spacing.0-5" to "spacing-0-5"
     const aliasName = aliasPath
       .split('.')
-      .slice(1) // Remove collection prefix
       .join('-')
       .toLowerCase()
-      .replace(/[^a-z0-9-]/g, '-');
-    value = `$${aliasName}`;
+      .replace(/[^a-z0-9-]/g, '-')
+      .replace(/--+/g, '-')
+      .replace(/^-|-$/g, '');
+
+    if (aliasName) {
+      value = `$${aliasName}`;
+    } else {
+      // Invalid alias, skip this token
+      return null;
+    }
   } else if (type === 'number' && typeof value === 'number') {
     // Format number values
     const lowerName = name.toLowerCase();
