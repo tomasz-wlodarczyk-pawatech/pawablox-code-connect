@@ -1,4 +1,4 @@
-import { mkdir, rm, writeFile } from 'fs/promises';
+import { mkdir, readdir, writeFile } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -287,11 +287,18 @@ async function main() {
     // Step 3: Download and process SVGs
     console.log('\n[3/4] Processing SVGs and generating React components...');
 
-    // Clean output directory
-    if (existsSync(OUTPUT_DIR)) {
-      await rm(OUTPUT_DIR, { recursive: true });
-    }
+    // Create output directory if it doesn't exist (preserve existing icons)
     await mkdir(OUTPUT_DIR, { recursive: true });
+
+    // Get existing icons to merge with new ones
+    let existingIcons = [];
+    if (existsSync(OUTPUT_DIR)) {
+      const files = await readdir(OUTPUT_DIR);
+      existingIcons = files
+        .filter(f => f.endsWith('.tsx'))
+        .map(f => f.replace('.tsx', ''));
+      console.log(`Found ${existingIcons.length} existing icons`);
+    }
 
     const generatedIcons = [];
 
@@ -333,13 +340,17 @@ async function main() {
       console.log(`  Generated: ${componentName}`);
     }
 
-    // Step 4: Generate barrel exports
+    // Step 4: Generate barrel exports (merge existing + new icons)
     console.log('\n[4/4] Generating barrel exports...');
-    const indexContent = generateIndexContent(generatedIcons.sort());
+
+    // Merge existing icons with newly generated ones (deduplicate)
+    const allIcons = [...new Set([...existingIcons, ...generatedIcons])].sort();
+    const indexContent = generateIndexContent(allIcons);
     await writeFile(INDEX_FILE, indexContent, 'utf-8');
 
     console.log('\n========================================');
-    console.log(`Successfully generated ${generatedIcons.length} icon components!`);
+    console.log(`Generated ${generatedIcons.length} new icon components`);
+    console.log(`Total icons: ${allIcons.length}`);
     console.log(`Output directory: packages/icons/src/icons/`);
     console.log('========================================\n');
 
