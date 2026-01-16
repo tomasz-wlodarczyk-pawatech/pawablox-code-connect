@@ -1,6 +1,6 @@
 import React, { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import clsx from 'clsx';
-import { IconSpinner } from '@pawablox/icons';
+import { IconSpinner } from '@tomasz-wlodarczyk-pawatech/icons';
 import { spinnerSizeMap, type ButtonSize } from '../../utils/buttonSizes';
 import styles from './Button.module.scss';
 

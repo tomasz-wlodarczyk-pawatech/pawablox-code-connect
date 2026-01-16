@@ -23,9 +23,9 @@ const config: StorybookConfig = {
       ...config.resolve,
       alias: {
         ...config.resolve?.alias,
-        '@pawablox/tokens': resolve(__dirname, '../packages/tokens'),
-        '@pawablox/components': resolve(__dirname, '../packages/components/src'),
-        '@pawablox/icons': resolve(__dirname, '../packages/icons/src'),
+        '@tomasz-wlodarczyk-pawatech/tokens': resolve(__dirname, '../packages/tokens'),
+        '@tomasz-wlodarczyk-pawatech/components': resolve(__dirname, '../packages/components/src'),
+        '@tomasz-wlodarczyk-pawatech/icons': resolve(__dirname, '../packages/icons/src'),
       },
     };
     return config;

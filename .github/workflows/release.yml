@@ -52,7 +52,7 @@ jobs:
         run: |
           cat << EOF > ~/.npmrc
           //npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}
-          @pawablox:registry=https://npm.pkg.github.com
+          @tomasz-wlodarczyk-pawatech:registry=https://npm.pkg.github.com
           always-auth=true
           EOF
 

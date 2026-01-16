@@ -1,6 +1,6 @@
 import React, { forwardRef, type ButtonHTMLAttributes } from 'react';
 import clsx from 'clsx';
-import { IconChevronDown, IconPlus } from '@pawablox/icons';
+import { IconChevronDown, IconPlus } from '@tomasz-wlodarczyk-pawatech/icons';
 import styles from './DepositButton.module.scss';
 
 export interface DepositButtonProps

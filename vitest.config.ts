@@ -15,8 +15,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@pawablox/tokens': resolve(__dirname, 'packages/tokens'),
-      '@pawablox/components': resolve(__dirname, 'packages/components/src'),
+      '@tomasz-wlodarczyk-pawatech/tokens': resolve(__dirname, 'packages/tokens'),
+      '@tomasz-wlodarczyk-pawatech/components': resolve(__dirname, 'packages/components/src'),
     },
   },
 });

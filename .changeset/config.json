@@ -7,12 +7,16 @@
   "commit": false,
   "fixed": [],
   "linked": [
-    ["@pawablox/components", "@pawablox/icons", "@pawablox/tokens"]
+    [
+      "@tomasz-wlodarczyk-pawatech/components",
+      "@tomasz-wlodarczyk-pawatech/icons",
+      "@tomasz-wlodarczyk-pawatech/tokens"
+    ]
   ],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@pawablox/storybook", "@pawablox/figma"],
+  "ignore": ["@tomasz-wlodarczyk-pawatech/storybook", "@tomasz-wlodarczyk-pawatech/figma"],
   "privatePackages": {
     "version": false,
     "tag": false

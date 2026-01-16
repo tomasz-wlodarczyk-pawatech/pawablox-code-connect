@@ -1,4 +1,4 @@
-import type { IconSize } from '@pawablox/icons';
+import type { IconSize } from '@tomasz-wlodarczyk-pawatech/icons';
 
 export type ButtonSize = 'sm' | 'default' | 'lg';
 

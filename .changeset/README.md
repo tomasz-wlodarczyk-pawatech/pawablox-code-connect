@@ -16,6 +16,7 @@ bun changeset
 ```
 
 This will prompt you to:
+
 1. Select which packages have changed
 2. Choose the type of version bump (major, minor, patch)
 3. Write a summary of the changes
@@ -25,5 +26,6 @@ The changeset file will be created in this folder and should be committed with y
 ## Releasing
 
 When changesets are merged to `main`, the GitHub Action will:
+
 1. Create a "Version Packages" PR that bumps versions and updates changelogs
 2. When that PR is merged, packages are automatically published to GitHub Packages

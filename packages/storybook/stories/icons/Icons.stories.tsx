@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Icon, IconSize } from '@pawablox/icons';
+import { Icon, IconSize } from '@tomasz-wlodarczyk-pawatech/icons';
 
-// Import all icons from @pawablox/icons
+// Import all icons from @tomasz-wlodarczyk-pawatech/icons
 // After running `bun script:icons`, uncomment and update these imports:
-// import { IconCheck, IconClose, IconChevronDown, ... } from '@pawablox/icons';
+// import { IconCheck, IconClose, IconChevronDown, ... } from '@tomasz-wlodarczyk-pawatech/icons';
 
 const meta: Meta<typeof Icon> = {
   title: 'Icons/Overview',

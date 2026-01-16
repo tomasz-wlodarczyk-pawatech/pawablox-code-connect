@@ -1,5 +1,5 @@
 import figma from '@figma/code-connect';
-import { DepositButton } from '@pawablox/components/primitives/deposit-button/DepositButton';
+import { DepositButton } from '@tomasz-wlodarczyk-pawatech/components/primitives/deposit-button/DepositButton';
 
 figma.connect(DepositButton, '<FIGMA_DEPOSIT_BUTTON>', {
   props: {

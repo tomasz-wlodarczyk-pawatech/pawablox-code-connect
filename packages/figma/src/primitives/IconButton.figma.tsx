@@ -4,7 +4,7 @@ import {
   IconButtonSize,
   IconButtonStyle,
   IconButtonVariant,
-} from '@pawablox/components/primitives/icon-button/IconButton';
+} from '@tomasz-wlodarczyk-pawatech/components/primitives/icon-button/IconButton';
 
 figma.connect(IconButton, '<FIGMA_ICON_BUTTON>', {
   props: {

@@ -45,18 +45,18 @@ bun script:icons         # Generate icons from Figma
 
 ```
 packages/
-├── components/     # @pawablox/components - React UI components
+├── components/     # @tomasz-wlodarczyk-pawatech/components - React UI components
 │   └── src/
 │       ├── primitives/   # Basic components (button, input, checkbox, etc.)
 │       ├── compositions/ # Complex composed components
 │       ├── hooks/        # Shared React hooks
 │       └── utils/        # Utility functions
-├── icons/          # @pawablox/icons - Icon components from Figma
-├── tokens/         # @pawablox/tokens - Design tokens as SCSS
+├── icons/          # @tomasz-wlodarczyk-pawatech/icons - Icon components from Figma
+├── tokens/         # @tomasz-wlodarczyk-pawatech/tokens - Design tokens as SCSS
 │   └── scss/
 │       ├── vars/         # Generated variables (colors, spacing, typography)
 │       └── _mixins.scss  # Reusable SCSS mixins
-├── figma/          # @pawablox/figma - Figma Code Connect definitions
+├── figma/          # @tomasz-wlodarczyk-pawatech/figma - Figma Code Connect definitions
 └── storybook/      # Storybook stories
 ```
 
@@ -94,9 +94,9 @@ Stories and Figma connections are in separate packages:
 Components use CSS Modules with SCSS. Import tokens like:
 
 ```scss
-@use '@pawablox/tokens/scss/mixins';
-@use '@pawablox/tokens/scss/vars/colors';
-@use '@pawablox/tokens/scss/vars/spacing';
+@use '@tomasz-wlodarczyk-pawatech/tokens/scss/mixins';
+@use '@tomasz-wlodarczyk-pawatech/tokens/scss/vars/colors';
+@use '@tomasz-wlodarczyk-pawatech/tokens/scss/vars/spacing';
 ```
 
 Available mixins include media queries (`mq-sm-up`, `mobile`, `tablet`, `desktop`), `visually-hidden`, `truncate`, `line-clamp`, `focus-ring`, `reset-button`, `reset-list`.
@@ -104,9 +104,9 @@ Available mixins include media queries (`mq-sm-up`, `mobile`, `tablet`, `desktop
 ## Path Aliases
 
 ```typescript
-'@pawablox/tokens'     → packages/tokens
-'@pawablox/components' → packages/components/src
-'@pawablox/icons'      → packages/icons/src
+'@tomasz-wlodarczyk-pawatech/tokens'     → packages/tokens
+'@tomasz-wlodarczyk-pawatech/components' → packages/components/src
+'@tomasz-wlodarczyk-pawatech/icons'      → packages/icons/src
 ```
 
 ## Related Projects

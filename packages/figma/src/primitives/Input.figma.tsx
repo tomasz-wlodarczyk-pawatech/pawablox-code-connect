@@ -1,7 +1,6 @@
-// import { Input } from '@pawablox/components/primitives/input/Input';
+// import { Input } from '@tomasz-wlodarczyk-pawatech/components/primitives/input/Input';
 
 // TODO: Update FIGMA_INPUT_URL with actual Figma component URL
-const _FIGMA_INPUT_URL = '<FIGMA_INPUT>';
 
 // Code Connect will be enabled when Input component is implemented
 // figma.connect(Input, FIGMA_INPUT_URL, {

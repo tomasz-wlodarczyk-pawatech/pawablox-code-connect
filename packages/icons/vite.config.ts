@@ -23,7 +23,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@pawablox/tokens': resolve(__dirname, '../tokens'),
+      '@tomasz-wlodarczyk-pawatech/tokens': resolve(__dirname, '../tokens'),
     },
   },
   build: {

@@ -23,8 +23,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@pawablox/tokens': resolve(__dirname, '../tokens'),
-      '@pawablox/icons': resolve(__dirname, '../icons/src'),
+      '@tomasz-wlodarczyk-pawatech/tokens': resolve(__dirname, '../tokens'),
+      '@tomasz-wlodarczyk-pawatech/icons': resolve(__dirname, '../icons/src'),
     },
   },
   build: {
@@ -34,7 +34,13 @@ export default defineConfig({
       fileName: 'index',
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime', '@pawablox/icons', 'clsx'],
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        '@tomasz-wlodarczyk-pawatech/icons',
+        'clsx',
+      ],
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',

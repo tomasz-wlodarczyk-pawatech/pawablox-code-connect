@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { IconButton } from '@pawablox/components/primitives/icon-button/IconButton';
-import { IconBank } from '@pawablox/icons';
+import { IconButton } from '@tomasz-wlodarczyk-pawatech/components/primitives/icon-button/IconButton';
+import { IconBank } from '@tomasz-wlodarczyk-pawatech/icons';
 
 const meta: Meta<typeof IconButton> = {
   title: 'Primitives/IconButton',

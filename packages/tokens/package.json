@@ -1,5 +1,5 @@
 {
-  "name": "@pawablox/tokens",
+  "name": "@tomasz-wlodarczyk-pawatech/tokens",
   "version": "0.1.0",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",

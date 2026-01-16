@@ -1,7 +1,7 @@
-@use '@pawablox/tokens/scss/vars/colors';
-@use '@pawablox/tokens/scss/vars/other';
-@use '@pawablox/tokens/scss/vars/typography';
-@use '@pawablox/tokens/scss/mixins';
+@use '@tomasz-wlodarczyk-pawatech/tokens/scss/vars/colors';
+@use '@tomasz-wlodarczyk-pawatech/tokens/scss/vars/other';
+@use '@tomasz-wlodarczyk-pawatech/tokens/scss/vars/typography';
+@use '@tomasz-wlodarczyk-pawatech/tokens/scss/mixins';
 
 .iconButton {
   @include mixins.reset-button;

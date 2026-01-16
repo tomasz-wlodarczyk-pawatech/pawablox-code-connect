@@ -1,5 +1,5 @@
 {
-  "name": "@pawablox/components",
+  "name": "@tomasz-wlodarczyk-pawatech/components",
   "version": "0.1.0",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
@@ -32,8 +32,8 @@
     "dev": "vite build --watch"
   },
   "dependencies": {
-    "@pawablox/icons": "workspace:*",
-    "@pawablox/tokens": "workspace:*",
+    "@tomasz-wlodarczyk-pawatech/icons": "workspace:*",
+    "@tomasz-wlodarczyk-pawatech/tokens": "workspace:*",
     "clsx": "2.1.0"
   },
   "peerDependencies": {

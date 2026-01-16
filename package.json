@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "bun run --filter '*' dev",
     "barrels": "ctix build --mode bundle -p packages/components/tsconfig.json -o packages/components/src --no-backup --overwrite",
-    "build": "bun run --filter '@pawablox/tokens' build && bun run --filter '@pawablox/icons' build && bun run --filter '@pawablox/components' build",
+    "build": "bun run --filter '@tomasz-wlodarczyk-pawatech/tokens' build && bun run --filter '@tomasz-wlodarczyk-pawatech/icons' build && bun run --filter '@tomasz-wlodarczyk-pawatech/components' build",
     "build:all": "bun run barrels && bun run build",
     "build:clean": "rm -rf packages/*/dist && bun run build",
     "test": "vitest run --passWithNoTests",

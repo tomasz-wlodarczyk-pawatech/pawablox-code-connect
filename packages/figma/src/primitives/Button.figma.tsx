@@ -4,7 +4,7 @@ import {
   ButtonSize,
   ButtonStyle,
   ButtonVariant,
-} from '@pawablox/components/primitives/button/Button';
+} from '@tomasz-wlodarczyk-pawatech/components/primitives/button/Button';
 
 figma.connect(Button, '<FIGMA_BUTTON>', {
   props: {

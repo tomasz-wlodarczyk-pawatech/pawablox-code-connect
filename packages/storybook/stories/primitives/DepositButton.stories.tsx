@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { DepositButton } from '@pawablox/components/primitives/deposit-button/DepositButton';
+import { DepositButton } from '@tomasz-wlodarczyk-pawatech/components/primitives/deposit-button/DepositButton';
 
 const meta: Meta<typeof DepositButton> = {
   title: 'Primitives/DepositButton',

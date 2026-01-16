@@ -1,10 +1,10 @@
 {
-  "name": "@pawablox/storybook",
+  "name": "@tomasz-wlodarczyk-pawatech/storybook",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@pawablox/components": "workspace:*",
-    "@pawablox/tokens": "workspace:*",
-    "@pawablox/icons": "workspace:*"
+    "@tomasz-wlodarczyk-pawatech/components": "workspace:*",
+    "@tomasz-wlodarczyk-pawatech/tokens": "workspace:*",
+    "@tomasz-wlodarczyk-pawatech/icons": "workspace:*"
   }
 }

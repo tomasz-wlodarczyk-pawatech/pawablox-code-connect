@@ -54,9 +54,9 @@ const ${componentName}Component: FC<${componentName}Props> = (props) => {
 export const ${componentName} = React.memo(${componentName}Component);
 `;
 
-const scssTemplate = `@use '@pawablox/tokens/scss/mixins';
-@use '@pawablox/tokens/scss/vars/colors';
-@use '@pawablox/tokens/scss/vars/sizes';
+const scssTemplate = `@use '@tomasz-wlodarczyk-pawatech/tokens/scss/mixins';
+@use '@tomasz-wlodarczyk-pawatech/tokens/scss/vars/colors';
+@use '@tomasz-wlodarczyk-pawatech/tokens/scss/vars/sizes';
 
 .${folderName} {
   // Add your styles here
@@ -64,7 +64,7 @@ const scssTemplate = `@use '@pawablox/tokens/scss/mixins';
 `;
 
 const storyTemplate = `import type { Meta, StoryObj } from '@storybook/react';
-import { ${componentName} } from '@pawablox/components/${category}/${folderName}/${componentName}';
+import { ${componentName} } from '@tomasz-wlodarczyk-pawatech/components/${category}/${folderName}/${componentName}';
 
 const meta: Meta<typeof ${componentName}> = {
   title: '${category.charAt(0).toUpperCase() + category.slice(1)}/${componentName}',
@@ -87,7 +87,7 @@ export const Default: Story = {
 
 // Figma Code Connect template
 const figmaTemplate = `import figma from '@figma/code-connect';
-// import { ${componentName} } from '@pawablox/components/${category}/${folderName}/${componentName}';
+// import { ${componentName} } from '@tomasz-wlodarczyk-pawatech/components/${category}/${folderName}/${componentName}';
 
 // TODO: Update FIGMA_${componentName.toUpperCase()}_URL with actual Figma component URL
 const FIGMA_${componentName.toUpperCase()}_URL = '<FIGMA_${componentName.toUpperCase()}>';
