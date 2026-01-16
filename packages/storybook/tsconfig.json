@@ -2,14 +2,13 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "./dist",
-    "declaration": true,
-    "declarationMap": true,
     "paths": {
+      "@pawablox/components/*": ["../components/src/*"],
       "@pawablox/icons": ["../icons/src"],
+      "@pawablox/icons/*": ["../icons/src/*"],
+      "@pawablox/tokens": ["../tokens"],
       "@pawablox/tokens/*": ["../tokens/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["stories/**/*"]
 }

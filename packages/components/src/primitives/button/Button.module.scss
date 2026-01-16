@@ -1,0 +1,155 @@
+@use '@pawablox/tokens/scss/vars/colors';
+@use '@pawablox/tokens/scss/vars/other';
+@use '@pawablox/tokens/scss/vars/spacing';
+@use '@pawablox/tokens/scss/vars/typography';
+@use '@pawablox/tokens/scss/mixins';
+
+// Base button styles
+.button {
+  @include mixins.reset-button;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: spacing.$spacing-2;
+  font-family: typography.$font-font-sans;
+  font-weight: typography.$font-weight-bold;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+
+  &:focus-visible {
+    @include mixins.focus-ring;
+  }
+}
+
+// Sizes
+.sm {
+  padding: spacing.$spacing-1-5 spacing.$spacing-2;
+  font-size: typography.$text-xs-font-size;
+  line-height: typography.$text-xs-line-height;
+  min-height: other.$height-h-7;
+}
+
+.default {
+  padding: spacing.$spacing-2 spacing.$spacing-3;
+  font-size: typography.$text-sm-font-size;
+  line-height: typography.$text-sm-line-height;
+  min-height: other.$height-h-9;
+}
+
+.lg {
+  padding: spacing.$spacing-2-5 spacing.$spacing-4;
+  font-size: typography.$text-sm-font-size;
+  line-height: typography.$text-sm-line-height;
+  min-height: other.$height-h-11;
+}
+
+// Styles (shapes)
+.square {
+  border-radius: other.$radius-button-radius;
+}
+
+.round {
+  border-radius: other.$radius-round-button-radius;
+}
+
+// Variants
+.primary {
+  background-color: colors.$colors-button-primary-bg-default;
+  color: colors.$colors-text-primary;
+  border: none;
+
+  &:hover:not(.disabled) {
+    background-color: colors.$colors-button-primary-bg-hover;
+  }
+
+  &.disabled {
+    background-color: colors.$colors-button-primary-bg-disabled;
+    color: colors.$colors-text-disabled;
+  }
+}
+
+.secondary {
+  background-color: colors.$colors-button-secondary-bg-default;
+  color: colors.$colors-text-primary-inverse;
+  border: none;
+
+  &:hover:not(.disabled) {
+    background-color: colors.$colors-button-secondary-bg-hover;
+  }
+
+  &.disabled {
+    background-color: colors.$colors-button-secondary-bg-disabled;
+    color: colors.$colors-text-disabled;
+  }
+}
+
+.outline {
+  background-color: transparent;
+  color: colors.$colors-text-primary;
+  border: 1px solid colors.$colors-border-secondary;
+
+  &:hover:not(.disabled) {
+    background-color: colors.$colors-background-secondary;
+  }
+
+  &.disabled {
+    color: colors.$colors-text-disabled;
+    border-color: colors.$colors-border-default;
+  }
+}
+
+.tertiary {
+  background-color: transparent;
+  color: colors.$colors-text-primary;
+  border: none;
+
+  &:hover:not(.disabled) {
+    background-color: colors.$colors-background-secondary;
+  }
+
+  &.disabled {
+    color: colors.$colors-text-disabled;
+  }
+}
+
+// States
+.disabled {
+  cursor: not-allowed;
+}
+
+.loading {
+  cursor: wait;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+// Icon
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  .sm & {
+    font-size: typography.$text-xs;
+  }
+
+  .default & {
+    font-size: typography.$text-base;
+  }
+
+  .lg & {
+    font-size: typography.$text-xl;
+  }
+}
+
+.label {
+  @include mixins.truncate;
+}

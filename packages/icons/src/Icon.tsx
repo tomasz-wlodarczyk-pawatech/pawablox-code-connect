@@ -3,23 +3,24 @@ import clsx from 'clsx';
 import type { IconProps, IconSize } from './types';
 import styles from './Icon.module.scss';
 
-const sizeMap: Record<IconSize, number> = {
-  xs: 12,
-  sm: 16,
-  md: 20,
-  lg: 24,
-  xl: 32,
+const sizeMap: Record<IconSize, string> = {
+  xs: '12px',
+  sm: '16px',
+  md: '20px',
+  lg: '24px',
+  xl: '32px',
 };
 
 export const Icon: React.FC<IconProps> = ({
-  size = 'md',
+  size,
   color = 'currentColor',
   className,
   spin = false,
   children,
   ...props
 }) => {
-  const dimension = sizeMap[size];
+  // If no size provided, use 1em to inherit from parent font-size
+  const dimension = size ? sizeMap[size] : '1em';
 
   return (
     <svg

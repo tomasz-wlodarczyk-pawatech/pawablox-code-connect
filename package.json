@@ -17,8 +17,8 @@
     "stylelint:fix": "stylelint \"**/*.scss\" --fix",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "figma:connect": "bunx figma connect",
-    "figma:publish": "bunx figma connect publish",
+    "figma:connect": "npx @figma/code-connect connect",
+    "figma:publish": "npx @figma/code-connect connect publish",
     "script:tokens": "bun scripts/tokens/app.mjs",
     "script:icons": "bun scripts/icons/app.mjs"
   },

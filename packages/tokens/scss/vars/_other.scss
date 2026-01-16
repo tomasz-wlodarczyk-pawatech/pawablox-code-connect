@@ -3,6 +3,8 @@
 // Auto-generated from Figma - DO NOT EDIT
 // ==========================================
 
+@use 'spacing';
+
 $blur-2xl: 40px;
 $blur-3xl: 64px;
 $blur-blur: 8px;
@@ -47,10 +49,6 @@ $container-sm: 384px;
 $container-xl: 576px;
 $container-xs: 320px;
 
-$gap-card: $spacing-1;
-$gap-none: $spacing-0;
-$gap-screen: $spacing-2;
-
 $height-h-0: 0px;
 $height-h-0-5: 2px;
 $height-h-1: 4px;
@@ -85,11 +83,6 @@ $height-h-80: 320px;
 $height-h-96: 384px;
 $height-h-px: 1px;
 
-$interactive-height-default: $height-h-9;
-$interactive-height-lg: $height-h-10;
-$interactive-height-sm: $height-h-8;
-$interactive-height-xs: $height-h-6;
-
 $max-width-max-w-0: 0px;
 $max-width-max-w-2xl: 672px;
 $max-width-max-w-2xs: 288px;
@@ -105,26 +98,6 @@ $max-width-max-w-sm: 384px;
 $max-width-max-w-xl: 576px;
 $max-width-max-w-xs: 320px;
 
-$padding-card-compact: $spacing-2;
-$padding-card-default: $spacing-3;
-$padding-none: $spacing-0;
-$padding-screen-compact: $spacing-2;
-$padding-screen-default: $spacing-3;
-
-$radius-2xl: $radius-rounded-3xl;
-$radius-3xl: $radius-rounded-4xl;
-$radius-badge-radius: $radius-rounded-xl;
-$radius-badge-radius-full: $radius-rounded-full;
-$radius-bet-button-radius: $radius-rounded-lg;
-$radius-button-radius: $radius-rounded-lg;
-$radius-card-radius: $radius-rounded-xl;
-$radius-full: $radius-rounded-full;
-$radius-input-radius: $radius-rounded-lg;
-$radius-lg: $radius-rounded-xl;
-$radius-md: $radius-rounded-lg;
-$radius-none: $radius-rounded-none;
-$radius-notification-radius: $radius-rounded-none;
-$radius-round-button-radius: $radius-rounded-full;
 $radius-rounded: 4px;
 $radius-rounded-2xl: 16px;
 $radius-rounded-3xl: 24px;
@@ -135,10 +108,6 @@ $radius-rounded-md: 6px;
 $radius-rounded-none: 0px;
 $radius-rounded-sm: 2px;
 $radius-rounded-xl: 12px;
-$radius-sm: $radius-rounded-md;
-$radius-xl: $radius-rounded-2xl;
-$radius-xs: $radius-rounded;
-$radius-xxs: $radius-rounded-sm;
 
 $width-w-0: 0px;
 $width-w-0-5: 2px;
@@ -173,3 +142,38 @@ $width-w-72: 288px;
 $width-w-80: 320px;
 $width-w-96: 384px;
 $width-w-px: 1px;
+
+// Semantic tokens (references)
+$gap-card: spacing.$spacing-1;
+$gap-none: spacing.$spacing-0;
+$gap-screen: spacing.$spacing-2;
+
+$interactive-height-default: $height-h-9;
+$interactive-height-lg: $height-h-10;
+$interactive-height-sm: $height-h-8;
+$interactive-height-xs: $height-h-6;
+
+$padding-card-compact: spacing.$spacing-2;
+$padding-card-default: spacing.$spacing-3;
+$padding-none: spacing.$spacing-0;
+$padding-screen-compact: spacing.$spacing-2;
+$padding-screen-default: spacing.$spacing-3;
+
+$radius-2xl: $radius-rounded-3xl;
+$radius-3xl: $radius-rounded-4xl;
+$radius-badge-radius: $radius-rounded-xl;
+$radius-badge-radius-full: $radius-rounded-full;
+$radius-bet-button-radius: $radius-rounded-lg;
+$radius-button-radius: $radius-rounded-lg;
+$radius-card-radius: $radius-rounded-xl;
+$radius-full: $radius-rounded-full;
+$radius-input-radius: $radius-rounded-lg;
+$radius-lg: $radius-rounded-xl;
+$radius-md: $radius-rounded-lg;
+$radius-none: $radius-rounded-none;
+$radius-notification-radius: $radius-rounded-none;
+$radius-round-button-radius: $radius-rounded-full;
+$radius-sm: $radius-rounded-md;
+$radius-xl: $radius-rounded-2xl;
+$radius-xs: $radius-rounded;
+$radius-xxs: $radius-rounded-sm;

@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@pawablox/components/*": ["../components/src/*"],
+      "@pawablox/icons": ["../icons/src"],
+      "@pawablox/icons/*": ["../icons/src/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}

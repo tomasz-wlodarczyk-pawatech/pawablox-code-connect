@@ -10,10 +10,14 @@
     "paths": {
       "primitives": ["packages/components/src/primitives"],
       "layout": ["packages/components/src/layout"],
-      "compositions": ["packages/components/src/compositions"]
+      "compositions": ["packages/components/src/compositions"],
+      "@pawablox/components/*": ["packages/components/src/*"],
+      "@pawablox/icons": ["packages/icons/src"],
+      "@pawablox/icons/*": ["packages/icons/src/*"]
     },
     "documentUrlSubstitutions": {
-      "<FIGMA_BUTTON>": "https://figma.com/design/XXX?node-id=YYY",
+      "<FIGMA_BUTTON>": "https://www.figma.com/design/oYNNzIJpnul2FoVnSjO3nL?node-id=19143:167938",
+      "<FIGMA_ICON_BUTTON>": "https://www.figma.com/design/oYNNzIJpnul2FoVnSjO3nL?node-id=21968:59791",
       "<FIGMA_INPUT>": "https://figma.com/design/XXX?node-id=ZZZ"
     }
   }

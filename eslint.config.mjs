@@ -44,6 +44,13 @@ export default tseslint.config(
     },
   },
   {
+    files: ['**/figma/**/*.tsx'],
+    rules: {
+      '@typescript-eslint/no-confusing-void-expression': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+    },
+  },
+  {
     ignores: [
       'dist/',
       'node_modules/',

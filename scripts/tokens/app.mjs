@@ -97,9 +97,9 @@ async function main() {
     console.log(`  _opacity.scss (${tokensByCategory.opacity.length} variables)`);
   }
 
-  // Typography
+  // Typography (needs fonts import for $roboto reference)
   if (tokensByCategory.typography.length > 0) {
-    writeScssFile('_typography.scss', tokensByCategory.typography, 'TYPOGRAPHY TOKENS');
+    writeScssFile('_typography.scss', tokensByCategory.typography, 'TYPOGRAPHY TOKENS', ["@use 'fonts';"]);
     console.log(`  _typography.scss (${tokensByCategory.typography.length} variables)`);
   }
 
@@ -189,7 +189,13 @@ function createToken(name, item) {
       .replace(/^-|-$/g, '');
 
     if (aliasName) {
-      value = `$${aliasName}`;
+      // Check if it's a font reference (roboto, geist-mono, georgia) - these need namespace
+      const fontNames = ['roboto', 'geist-mono', 'georgia'];
+      if (fontNames.includes(aliasName)) {
+        value = `fonts.$${aliasName}`;
+      } else {
+        value = `$${aliasName}`;
+      }
     } else {
       // Invalid alias, skip this token
       return null;
@@ -245,7 +251,7 @@ function categorizeToken(name, type) {
   return 'other';
 }
 
-function writeScssFile(filename, tokens, title) {
+function writeScssFile(filename, tokens, title, imports = []) {
   const lines = [
     '// ==========================================',
     `// ${title}`,
@@ -254,8 +260,18 @@ function writeScssFile(filename, tokens, title) {
     '',
   ];
 
-  // Sort tokens naturally (spacing-1, spacing-2, spacing-10 not spacing-1, spacing-10, spacing-2)
-  tokens.sort((a, b) => {
+  // Add any required imports
+  if (imports.length > 0) {
+    lines.push(...imports);
+    lines.push('');
+  }
+
+  // Separate tokens into primitives (raw values) and references (tokens that use $variable)
+  const primitiveTokens = tokens.filter(t => !String(t.value).startsWith('$'));
+  const referenceTokens = tokens.filter(t => String(t.value).startsWith('$'));
+
+  // Sort function for natural ordering
+  const naturalSort = (a, b) => {
     const aMatch = a.name.match(/^(.+?)-?(\d+)$/);
     const bMatch = b.name.match(/^(.+?)-?(\d+)$/);
 
@@ -264,11 +280,35 @@ function writeScssFile(filename, tokens, title) {
     }
 
     return a.name.localeCompare(b.name);
-  });
+  };
 
+  primitiveTokens.sort(naturalSort);
+  referenceTokens.sort(naturalSort);
+
+  // Write primitive tokens first (they don't depend on anything)
   let lastGroup = '';
-  for (const token of tokens) {
-    // Add blank line between groups
+  for (const token of primitiveTokens) {
+    const group = token.name.split('-')[0];
+    if (group !== lastGroup && lastGroup !== '') {
+      lines.push('');
+    }
+    lastGroup = group;
+
+    if (token.comment) {
+      lines.push(`// ${token.comment}`);
+    }
+    lines.push(`$${token.name}: ${token.value};`);
+  }
+
+  // Add separator if we have both types
+  if (primitiveTokens.length > 0 && referenceTokens.length > 0) {
+    lines.push('');
+    lines.push('// Semantic tokens (references)');
+  }
+
+  // Write reference tokens (they depend on primitives)
+  lastGroup = '';
+  for (const token of referenceTokens) {
     const group = token.name.split('-')[0];
     if (group !== lastGroup && lastGroup !== '') {
       lines.push('');

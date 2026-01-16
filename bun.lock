@@ -38,6 +38,7 @@
       "name": "@pawablox/components",
       "version": "0.1.0",
       "dependencies": {
+        "@pawablox/icons": "workspace:*",
         "@pawablox/tokens": "workspace:*",
         "clsx": "2.1.0",
       },
@@ -73,6 +74,7 @@
       "version": "0.1.0",
       "dependencies": {
         "@pawablox/components": "workspace:*",
+        "@pawablox/icons": "workspace:*",
         "@pawablox/tokens": "workspace:*",
       },
     },

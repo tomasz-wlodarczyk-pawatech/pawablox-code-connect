@@ -9,3 +9,4 @@ export { IconCoins } from './icons/IconCoins';
 export { IconDeposit } from './icons/IconDeposit';
 export { IconMoney } from './icons/IconMoney';
 export { IconWithdrawal } from './icons/IconWithdrawal';
+export { IconSpinner } from './icons/IconSpinner';

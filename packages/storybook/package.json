@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@pawablox/components": "workspace:*",
-    "@pawablox/tokens": "workspace:*"
+    "@pawablox/tokens": "workspace:*",
+    "@pawablox/icons": "workspace:*"
   }
 }
