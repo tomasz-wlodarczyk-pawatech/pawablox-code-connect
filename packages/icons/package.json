@@ -19,13 +19,16 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./styles.css": "./dist/styles/index.css"
+    "./styles.css": "./dist/styles/index.css",
+    "./styles.scss": "./dist/scss/index.scss",
+    "./scss/*": "./dist/scss/*"
   },
   "files": [
     "dist"
   ],
   "sideEffects": [
-    "**/*.css"
+    "**/*.css",
+    "**/*.scss"
   ],
   "scripts": {
     "build": "vite build",
