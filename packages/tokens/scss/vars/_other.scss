@@ -3,8 +3,6 @@
 // Auto-generated from Figma - DO NOT EDIT
 // ==========================================
 
-@use 'spacing';
-
 $blur-2xl: 40px;
 $blur-3xl: 64px;
 $blur-blur: 8px;
@@ -144,20 +142,20 @@ $width-w-96: 384px;
 $width-w-px: 1px;
 
 // Semantic tokens (references)
-$gap-card: spacing.$spacing-1;
-$gap-none: spacing.$spacing-0;
-$gap-screen: spacing.$spacing-2;
+$gap-card: $spacing-1;
+$gap-none: $spacing-0;
+$gap-screen: $spacing-2;
 
 $interactive-height-default: $height-h-9;
 $interactive-height-lg: $height-h-10;
 $interactive-height-sm: $height-h-8;
 $interactive-height-xs: $height-h-6;
 
-$padding-card-compact: spacing.$spacing-2;
-$padding-card-default: spacing.$spacing-3;
-$padding-none: spacing.$spacing-0;
-$padding-screen-compact: spacing.$spacing-2;
-$padding-screen-default: spacing.$spacing-3;
+$padding-card-compact: $spacing-2;
+$padding-card-default: $spacing-3;
+$padding-none: $spacing-0;
+$padding-screen-compact: $spacing-2;
+$padding-screen-default: $spacing-3;
 
 $radius-2xl: $radius-rounded-3xl;
 $radius-3xl: $radius-rounded-4xl;
