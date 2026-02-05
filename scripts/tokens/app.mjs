@@ -58,6 +58,15 @@ async function main() {
     processTokenGroup(collection, '', tokensByCategory);
   }
 
+  // Deduplicate tokens - later collections (Theme) override earlier ones (TailwindCSS)
+  for (const category in tokensByCategory) {
+    const seen = new Map();
+    for (const token of tokensByCategory[category]) {
+      seen.set(token.name, token);
+    }
+    tokensByCategory[category] = [...seen.values()];
+  }
+
   console.log('');
   console.log('Generating SCSS files...');
 
